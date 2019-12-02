@@ -5,4 +5,5 @@ import com.example.milktea.pojo.AdminInfoDO;
 
 public interface AdminInfoService extends AbstractService<AdminInfoDO>{
 
+    AdminInfoDO login(AdminInfoDO record);
 }

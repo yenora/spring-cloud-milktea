@@ -229,4 +229,10 @@
     </set>
     where id = #{id,jdbcType=BIGINT} AND version=#{version,jdbcType=INTEGER}
   </update>
+  <select id="login" resultMap="BaseResultMap" parameterType="com.example.milktea.pojo.AdminInfoDO" >
+    select
+    <include refid="Base_Column_List" />
+    from admin_info
+    where name = #{name,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+  </select>
 </mapper>

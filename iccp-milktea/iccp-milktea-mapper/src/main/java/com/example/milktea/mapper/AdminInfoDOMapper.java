@@ -30,4 +30,6 @@ public interface AdminInfoDOMapper {
     int updateByPrimaryKey(AdminInfoDO record);
 
     int updateByPrimaryKeySelectiveCAS(AdminInfoDO record);
+
+    List<AdminInfoDO> login(AdminInfoDO record);
 }

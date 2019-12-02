@@ -99,7 +99,16 @@ private static final Logger LOGGER = LoggerFactory.getLogger(AdminInfoController
 		}
 		AdminInfoDO result = adminInfoService.getBy(query);
 		return ResponseEntity.ok(result);
+	}
 
+	@AutoLog(value="调用管理员登录接口")
+	@PostMapping("/login")
+	public ResponseEntity<AdminInfoDO> login(@RequestBody @Valid AdminInfoDO query) throws Exception {
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("调用管理员信息列表查询接口");
+		}
+		AdminInfoDO result = adminInfoService.login(query);
+		return ResponseEntity.ok(result);
 	}
 }
 

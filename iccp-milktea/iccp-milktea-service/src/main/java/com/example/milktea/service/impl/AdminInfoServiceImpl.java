@@ -2,7 +2,11 @@ package com.example.milktea.service.impl;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+
+import java.time.LocalDateTime;
 import java.util.List;
+
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,6 +92,27 @@ public class AdminInfoServiceImpl implements AdminInfoService{
 			return null;
 		}
 		return result.get(0);
+	}
+
+	@Override
+	@Transactional
+	public AdminInfoDO login(AdminInfoDO record) {
+		checkNotNull(record.getName(), "record's name is null");
+		checkNotNull(record.getPassword(), "record's password is null");
+		List<AdminInfoDO> result = adminInfoMapper.login(record);
+		checkState(result.size()<2, "multy result by query");
+		if(result.isEmpty()){
+			return null;
+		}
+		record = result.get(0);
+		record.setUpdateTime(LocalDateTime.now());
+		if (record.getFreq() == null) {
+			record.setFreq(1);
+		} else {
+			record.setFreq(record.getFreq() + 1);
+		}
+		((AdminInfoService) AopContext.currentProxy()).update(record);
+		return record;
 	}
 }
 
