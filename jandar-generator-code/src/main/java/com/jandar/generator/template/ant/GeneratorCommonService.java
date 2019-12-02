@@ -31,7 +31,7 @@ public class GeneratorCommonService implements Ant{
 			bw.append("package " + data.getPackage() + ";");
 			bw.newLine();
 			bw.newLine();
-			bw.append("import com.jandar.common.service.AbstractService;");
+			bw.append("import com.example.common.service.AbstractService;");
 			bw.newLine();
 			bw.append("import "+ data.getDOPackageName() + ";");
 			bw.newLine();

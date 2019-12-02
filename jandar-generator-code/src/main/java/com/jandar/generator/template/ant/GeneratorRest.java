@@ -58,15 +58,15 @@ public class GeneratorRest implements Ant{
 			bw.newLine();
 			bw.append("import org.springframework.web.bind.annotation.RequestMapping;");
 			bw.newLine();
-			bw.append("import com.jandar.common.log.AutoLog;");
+			bw.append("import com.example.common.log.AutoLog;");
 			bw.newLine();
-			bw.append("import com.jandar.common.util.PageResult;");
+			bw.append("import com.example.common.util.PageResult;");
 			bw.newLine();
 			bw.append("import "+config.getDOBasePackageName()+".pojo."+config.getDOName()+";");
 			bw.newLine();
 			bw.append("import "+config.getDOBasePackageName()+".service."+config.getDOSimpleName()+"Service;");
 			bw.newLine();
-			bw.append("import com.jandar.common.dto.SearchDTO;");
+			bw.append("import com.example.common.dto.SearchDTO;");
 			bw.newLine();
 			bw.newLine();
 			bw.append("@Controller");

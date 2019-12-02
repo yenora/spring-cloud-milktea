@@ -52,11 +52,11 @@ public class GeneratorPortalRest implements Ant{
 			bw.newLine();
 			bw.append("import org.springframework.web.bind.annotation.RequestBody;");
 			bw.newLine();
-			bw.append("import com.jandar.common.dto.SearchDTO;");
+			bw.append("import com.example.common.dto.SearchDTO;");
 			bw.newLine();
 			bw.append("import "+config.getDOPackageName()+";");
 			bw.newLine();
-			bw.append("import com.jandar.common.util.PageResult;");
+			bw.append("import com.example.common.util.PageResult;");
 			bw.newLine();
 			bw.append("import " + 
 					config.getPackage().substring(0, config.getPackage().lastIndexOf(".")) + ".service." 

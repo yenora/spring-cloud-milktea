@@ -58,7 +58,7 @@ public class GeneratorCommonServiceImpl implements Ant{
 			bw.newLine();
 			bw.append("import "+config.getPackage()+"."+config.getDOSimpleName()+"Service;");
 			bw.newLine();
-			bw.append("import com.jandar.common.dto.SearchDTO;");
+			bw.append("import com.example.common.dto.SearchDTO;");
 			bw.newLine();
 			bw.newLine();
 			bw.append("@Service");

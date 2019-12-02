@@ -1,6 +1,3 @@
-/**
-  * Copyright 2019 jandar
-  */
 package com.jandar.generator;
 
 public interface Data {
@@ -39,12 +36,12 @@ public interface Data {
 	String getDOCH();
 	/**
 	 * 
-	 * @return com.jandar.ipcp.temple.service
+	 * @return com.example.iccp.milktea.service
 	 */
 	String getPackage();
 	/**
 	 * 
-	 * @return C:/document/FTP/iccp-temple-service
+	 * @return C:/document/FTP/iccp-milktea-service
 	 */
 	String getDist();
 	/**

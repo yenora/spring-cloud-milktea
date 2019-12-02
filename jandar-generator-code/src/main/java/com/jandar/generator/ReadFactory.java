@@ -1,6 +1,3 @@
-/**
-  * Copyright 2019 jandar
-  */
 package com.jandar.generator;
 
 import java.io.File;
