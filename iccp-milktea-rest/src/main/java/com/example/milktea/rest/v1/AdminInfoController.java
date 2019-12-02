@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.jandar.common.log.AutoLog;
-import com.jandar.common.util.PageResult;
+import com.example.common.log.AutoLog;
+import com.example.common.util.PageResult;
 import com.example.milktea.pojo.AdminInfoDO;
 import com.example.milktea.service.AdminInfoService;
-import com.jandar.common.dto.SearchDTO;
+import com.example.common.dto.SearchDTO;
 
 @Controller
 @RequestMapping("/v1/admin/info")

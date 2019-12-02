@@ -1,4 +1,4 @@
-package dto;
+package com.example.common.dto;
 
 import java.io.Serializable;
 
@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * @Description:
+ * @Description: 查询条件
  * @Author: yaos
  * @Date: 2019-11-29 09:50
  * @Version: V1.0

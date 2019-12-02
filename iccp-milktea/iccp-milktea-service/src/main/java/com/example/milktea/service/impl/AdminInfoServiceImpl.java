@@ -3,7 +3,6 @@ package com.example.milktea.service.impl;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +13,7 @@ import com.example.milktea.pojo.AdminInfoDO;
 import com.example.milktea.pojo.AdminInfoDOExample;
 import com.example.milktea.pojo.AdminInfoDOExample.Criteria;
 import com.example.milktea.service.AdminInfoService;
-import com.jandar.common.dto.SearchDTO;
+import com.example.common.dto.SearchDTO;
 
 @Service
 public class AdminInfoServiceImpl implements AdminInfoService{
@@ -84,7 +83,7 @@ public class AdminInfoServiceImpl implements AdminInfoService{
 		Criteria criteria = example.createCriteria();
 		//TODO edit your query condition
 		List<AdminInfoDO> result = adminInfoMapper.selectByExample(example);
-		checkState(result.size()<2, "multy result by query");
+		checkState(result.size()<2, "multy com.example.common.result by query");
 		if(result.isEmpty()){
 			return null;
 		}

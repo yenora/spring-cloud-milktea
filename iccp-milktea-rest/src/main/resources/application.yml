@@ -1,0 +1,21 @@
+spring:
+  profiles: default
+  application:
+    name: ICCP-MILKTEA-REST
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/milktea?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&allowMultiQueries=true
+    username: root
+    password: "123456"
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+    encoder-name: ICCP-MILKTEA-REST
+
+info:
+  name: "ICCP-MILKTEA-REST"
+  encoding: "UTF-8"
+  jdk: "1.8"

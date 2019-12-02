@@ -1,4 +1,4 @@
-package util;
+package com.example.common.util;
 
 import java.io.Serializable;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import com.github.pagehelper.PageInfo;
 
 /**
- * @Description:
+ * @Description: 分页方法
  * @Author: yaos
  * @Date: 2019-11-29 09:50
  * @Version: V1.0

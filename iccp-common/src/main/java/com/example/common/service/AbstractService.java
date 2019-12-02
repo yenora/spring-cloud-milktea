@@ -1,10 +1,10 @@
-package service;
+package com.example.common.service;
 
 import com.github.pagehelper.PageInfo;
-import dto.SearchDTO;
+import com.example.common.dto.SearchDTO;
 
 /**
- * @Description:
+ * @Description: 统一的抽象方法接口，所有的服务类都要实现这个接口
  * @Author: yaos
  * @Date: 2019-11-29 09:50
  * @Version: V1.0

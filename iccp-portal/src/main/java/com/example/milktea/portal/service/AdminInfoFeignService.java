@@ -3,7 +3,7 @@ package com.example.milktea.portal.service;
 import javax.validation.Valid;
 import java.util.List;
 
-import dto.SearchDTO;
+import com.example.common.dto.SearchDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import com.example.milktea.pojo.AdminInfoDO;
 import com.example.milktea.portal.service.fallback.AdminInfoFeignFallback;
-import util.PageResult;
+import com.example.common.util.PageResult;
 
 @FeignClient(value = "ICCP-MILKTEA-REST", fallback = AdminInfoFeignFallback.class)
 public interface AdminInfoFeignService {

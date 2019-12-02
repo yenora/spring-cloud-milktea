@@ -1,4 +1,4 @@
-package result;
+package com.example.common.result;
 
 import java.io.Serializable;
 

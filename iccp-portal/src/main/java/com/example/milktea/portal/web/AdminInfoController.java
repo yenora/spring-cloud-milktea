@@ -1,14 +1,14 @@
 package com.example.milktea.portal.web;
 
-import dto.SearchDTO;
+import com.example.common.dto.SearchDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import javax.validation.Valid;
 import com.example.milktea.pojo.AdminInfoDO;
 import com.example.milktea.portal.service.AdminInfoFeignService;
 import org.springframework.web.bind.annotation.*;
-import result.Result;
-import util.PageResult;
+import com.example.common.result.Result;
+import com.example.common.util.PageResult;
 
 
 @RestController

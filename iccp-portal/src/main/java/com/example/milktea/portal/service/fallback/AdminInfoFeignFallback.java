@@ -1,6 +1,6 @@
 package com.example.milktea.portal.service.fallback;
 
-import dto.SearchDTO;
+import com.example.common.dto.SearchDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.Lists;
 import com.example.milktea.pojo.AdminInfoDO;
 import com.example.milktea.portal.service.AdminInfoFeignService;
-import util.PageResult;
+import com.example.common.util.PageResult;
 
 @Component
 public class AdminInfoFeignFallback implements AdminInfoFeignService {

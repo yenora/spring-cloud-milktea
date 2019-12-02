@@ -1,7 +1,9 @@
 package com.example.milktea.rest;
 
+import com.example.milktea.service.EnablePropertyService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 /**
  * @Description:
@@ -10,8 +12,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Version: V1.0
  **/
 @SpringBootApplication
-public class RestApplication {
+@EnableEurekaClient
+@EnablePropertyService
+public class Application {
     public static void main(String[] args) {
-        SpringApplication.run(RestApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
 }
