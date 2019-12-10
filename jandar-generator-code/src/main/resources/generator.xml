@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<generator>
+   	<!-- 全局参数配置 -->
+   	<global>
+	   	<do>com.example.milktea.pojo.AdminDO</do>
+	   	<ch>管理员信息</ch>
+   	</global>
+   	<!-- 生成调用mapper的service代码，注释掉就不会生成相关代码-->
+   	<service>
+   		<!-- 包名 -->
+   		<package>com.example.milktea.service</package>
+   		<!-- 生成代码地址 -->
+   		<dist>F:\github\spring-cloud-milktea\iccp-milktea\iccp-milktea-service</dist>
+   	</service>
+   	<!-- 生成调用service的rest代码，注释掉就不会生成相关代码 -->
+    <rest>
+    	<!-- 包名 -->
+   		<package>com.example.milktea.rest.v1</package>
+   		<!-- 生成代码地址 -->
+   		<dist>F:\github\spring-cloud-milktea\iccp-milktea-rest</dist>
+   	</rest>
+   	<!-- 生成调用rest的feign代码，注释掉就不会生成相关代码 -->
+   	<feign>
+   		<!-- eureka中的服务名称 -->
+   		<client>ICCP-MILK-REST</client>
+   		<!-- 包名 -->
+   		<package>com.example.milktea.portal.service</package>
+   		<!-- 生成代码地址 -->
+   		<dist>F:\github\spring-cloud-milktea\iccp-portal</dist>
+   	</feign>
+   	<!-- 生成调用feign的controller代码，注释掉就不会生成相关代码 -->
+   	<portal>
+   		<!-- 包名 -->
+   		<package>com.example.milktea.portal.web</package>
+   		<!-- 生成代码地址 -->
+   		<dist>F:\github\spring-cloud-milktea/iccp-portal</dist>
+   	</portal>
+</generator>

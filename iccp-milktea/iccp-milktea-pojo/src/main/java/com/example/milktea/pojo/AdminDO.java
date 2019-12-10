@@ -1,37 +1,39 @@
 package com.example.milktea.pojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AdminInfoDO {
-    /** 管理员ID*/
+public class AdminDO {
+    /** */
     private Long id;
 
     /** 管理员名称*/
-    @Length(max = 50, message = "管理员名称最大长度为50")
+    @Length(max = 255, message = "管理员名称最大长度为255")
     private String name;
 
     /** 管理员密码*/
-    @Length(max = 255, message = "管理员密码最大长度为50")
+    @Length(max = 255, message = "管理员密码最大长度为255")
     private String password;
 
-    /** 登录次数*/
-    private Integer freq;
+    /** 电话*/
+    @Length(max = 20, message = "电话最大长度为20")
+    private String tel;
 
-    /** 最近登录时间*/
+    /** 创建时间*/
     @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updateTime;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime createTime;
 
     public Long getId() {
         return id;
@@ -57,19 +59,19 @@ public class AdminInfoDO {
         this.password = password == null ? null : password.trim();
     }
 
-    public Integer getFreq() {
-        return freq;
+    public String getTel() {
+        return tel;
     }
 
-    public void setFreq(Integer freq) {
-        this.freq = freq;
+    public void setTel(String tel) {
+        this.tel = tel == null ? null : tel.trim();
     }
 
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
+    public LocalDateTime getCreateTime() {
+        return createTime;
     }
 
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 }

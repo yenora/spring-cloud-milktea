@@ -16,45 +16,45 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.common.log.AutoLog;
 import com.example.common.util.PageResult;
-import com.example.milktea.pojo.AdminInfoDO;
-import com.example.milktea.service.AdminInfoService;
+import com.example.milktea.pojo.AdminDO;
+import com.example.milktea.service.AdminService;
 import com.example.common.dto.SearchDTO;
 
 @Controller
-@RequestMapping("/v1/admin/info")
-public class AdminInfoController {
+@RequestMapping("/v1/admin")
+public class AdminController {
 
-private static final Logger LOGGER = LoggerFactory.getLogger(AdminInfoController.class);
+private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
 	@Autowired
-	private AdminInfoService adminInfoService;
+	private AdminService adminService;
 
 	@AutoLog(value="调用管理员信息分页列表查询接口")
 	@PostMapping("/pageResult")
-	public ResponseEntity<PageResult<AdminInfoDO>> pageResult(@RequestBody SearchDTO<AdminInfoDO> query) throws Exception {
+	public ResponseEntity<PageResult<AdminDO>> pageResult(@RequestBody SearchDTO<AdminDO> query) throws Exception {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("调用管理员信息分页列表查询接口");
 		}
-		PageResult<AdminInfoDO> pageResult = PageResult.build(adminInfoService.pageList(query));
+		PageResult<AdminDO> pageResult = PageResult.build(adminService.pageList(query));
 		return ResponseEntity.ok(pageResult);
 	}
 
 	@AutoLog(value="调用管理员信息详情查询接口")
 	@GetMapping("/{id}")
-	public ResponseEntity<AdminInfoDO> object(@PathVariable("id") Long id) throws Exception {
+	public ResponseEntity<AdminDO> object(@PathVariable("id") Long id) throws Exception {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("调用管理员信息详情查询接口");
 		}
-		AdminInfoDO result = adminInfoService.get(id);
+		AdminDO result = adminService.get(id);
 		return ResponseEntity.ok(result);
 	}
 
 	@AutoLog(value="调用管理员信息添加接口")
 	@PostMapping("/add")
-	public ResponseEntity<Void> add(@RequestBody @Valid AdminInfoDO adminInfo) throws Exception {
+	public ResponseEntity<Void> add(@RequestBody @Valid AdminDO admin) throws Exception {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("调用管理员信息添加接口");
 		}
-		adminInfoService.add(adminInfo);
+		adminService.add(admin);
 		return ResponseEntity.ok().build();
 	}
 
@@ -64,51 +64,42 @@ private static final Logger LOGGER = LoggerFactory.getLogger(AdminInfoController
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("调用管理员信息删除接口");
 		}
-		adminInfoService.delete(id);
+		adminService.delete(id);
 		return ResponseEntity.ok().build();
 	}
 
 	@AutoLog(value="调用管理员信息修改接口")
 	@PutMapping("/update")
-	public ResponseEntity<Void> update(@RequestBody @Valid AdminInfoDO adminInfo) throws Exception {
+	public ResponseEntity<Void> update(@RequestBody @Valid AdminDO admin) throws Exception {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("调用管理员信息修改接口");
 		}
 		//you can call updateCAS method while DO object has version field!
-		adminInfoService.update(adminInfo);
+		adminService.update(admin);
 		return ResponseEntity.ok().build();
 
 	}
 
 	@AutoLog(value="调用管理员信息列表查询接口")
 	@PostMapping("/query/list")
-	public ResponseEntity<List<AdminInfoDO>> queryList(@RequestBody @Valid AdminInfoDO query) throws Exception {
+	public ResponseEntity<List<AdminDO>> queryList(@RequestBody @Valid AdminDO query) throws Exception {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("调用管理员信息列表查询接口");
 		}
-		List<AdminInfoDO> result = adminInfoService.listBy(query);
+		List<AdminDO> result = adminService.listBy(query);
 		return ResponseEntity.ok(result);
 
 	}
 
 	@AutoLog(value="调用管理员信息列表查询接口")
 	@PostMapping("/query/object")
-	public ResponseEntity<AdminInfoDO> queryObject(@RequestBody @Valid AdminInfoDO query) throws Exception {
+	public ResponseEntity<AdminDO> queryObject(@RequestBody @Valid AdminDO query) throws Exception {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("调用管理员信息列表查询接口");
 		}
-		AdminInfoDO result = adminInfoService.getBy(query);
+		AdminDO result = adminService.getBy(query);
 		return ResponseEntity.ok(result);
-	}
 
-	@AutoLog(value="调用管理员登录接口")
-	@PostMapping("/login")
-	public ResponseEntity<AdminInfoDO> login(@RequestBody @Valid AdminInfoDO query) throws Exception {
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("调用管理员信息列表查询接口");
-		}
-		AdminInfoDO result = adminInfoService.login(query);
-		return ResponseEntity.ok(result);
 	}
 }
 

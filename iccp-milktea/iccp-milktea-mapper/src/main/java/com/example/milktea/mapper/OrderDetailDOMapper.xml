@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.example.milktea.mapper.AdminInfoDOMapper" >
-  <resultMap id="BaseResultMap" type="com.example.milktea.pojo.AdminInfoDO" >
+<mapper namespace="com.example.milktea.mapper.OrderDetailDOMapper" >
+  <resultMap id="BaseResultMap" type="com.example.milktea.pojo.OrderDetailDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="password" property="password" jdbcType="VARCHAR" />
-    <result column="freq" property="freq" jdbcType="INTEGER" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="quantity" property="quantity" jdbcType="BIGINT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -67,15 +66,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, name, password, freq, update_time
+    id, order_id, product_id, quantity
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.milktea.pojo.AdminInfoDOExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.milktea.pojo.OrderDetailDOExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from admin_info
+    from order_detail
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -86,85 +85,76 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
-    from admin_info
+    from order_detail
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from admin_info
+    delete from order_detail
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.example.milktea.pojo.AdminInfoDOExample" >
-    delete from admin_info
+  <delete id="deleteByExample" parameterType="com.example.milktea.pojo.OrderDetailDOExample" >
+    delete from order_detail
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.example.milktea.pojo.AdminInfoDO" >
-    insert into admin_info (id, name, password, 
-      freq, update_time)
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{freq,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP})
+  <insert id="insert" parameterType="com.example.milktea.pojo.OrderDetailDO" >
+    insert into order_detail (id, order_id, product_id, 
+      quantity)
+    values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, 
+      #{quantity,jdbcType=BIGINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.example.milktea.pojo.AdminInfoDO" >
-    insert into admin_info
+  <insert id="insertSelective" parameterType="com.example.milktea.pojo.OrderDetailDO" >
+    insert into order_detail
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
       </if>
-      <if test="name != null" >
-        name,
+      <if test="orderId != null" >
+        order_id,
       </if>
-      <if test="password != null" >
-        password,
+      <if test="productId != null" >
+        product_id,
       </if>
-      <if test="freq != null" >
-        freq,
-      </if>
-      <if test="updateTime != null" >
-        update_time,
+      <if test="quantity != null" >
+        quantity,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
+      <if test="orderId != null" >
+        #{orderId,jdbcType=BIGINT},
       </if>
-      <if test="password != null" >
-        #{password,jdbcType=VARCHAR},
+      <if test="productId != null" >
+        #{productId,jdbcType=BIGINT},
       </if>
-      <if test="freq != null" >
-        #{freq,jdbcType=INTEGER},
-      </if>
-      <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
+      <if test="quantity != null" >
+        #{quantity,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.example.milktea.pojo.AdminInfoDOExample" resultType="java.lang.Integer" >
-    select count(*) from admin_info
+  <select id="countByExample" parameterType="com.example.milktea.pojo.OrderDetailDOExample" resultType="java.lang.Integer" >
+    select count(*) from order_detail
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update admin_info
+    update order_detail
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.name != null" >
-        name = #{record.name,jdbcType=VARCHAR},
+      <if test="record.orderId != null" >
+        order_id = #{record.orderId,jdbcType=BIGINT},
       </if>
-      <if test="record.password != null" >
-        password = #{record.password,jdbcType=VARCHAR},
+      <if test="record.productId != null" >
+        product_id = #{record.productId,jdbcType=BIGINT},
       </if>
-      <if test="record.freq != null" >
-        freq = #{record.freq,jdbcType=INTEGER},
-      </if>
-      <if test="record.updateTime != null" >
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      <if test="record.quantity != null" >
+        quantity = #{record.quantity,jdbcType=BIGINT},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -172,67 +162,35 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update admin_info
+    update order_detail
     set id = #{record.id,jdbcType=BIGINT},
-      name = #{record.name,jdbcType=VARCHAR},
-      password = #{record.password,jdbcType=VARCHAR},
-      freq = #{record.freq,jdbcType=INTEGER},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      order_id = #{record.orderId,jdbcType=BIGINT},
+      product_id = #{record.productId,jdbcType=BIGINT},
+      quantity = #{record.quantity,jdbcType=BIGINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.milktea.pojo.AdminInfoDO" >
-    update admin_info
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.milktea.pojo.OrderDetailDO" >
+    update order_detail
     <set >
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=BIGINT},
       </if>
-      <if test="password != null" >
-        password = #{password,jdbcType=VARCHAR},
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=BIGINT},
       </if>
-      <if test="freq != null" >
-        freq = #{freq,jdbcType=INTEGER},
-      </if>
-      <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      <if test="quantity != null" >
+        quantity = #{quantity,jdbcType=BIGINT},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.milktea.pojo.AdminInfoDO" >
-    update admin_info
-    set name = #{name,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      freq = #{freq,jdbcType=INTEGER},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+  <update id="updateByPrimaryKey" parameterType="com.example.milktea.pojo.OrderDetailDO" >
+    update order_detail
+    set order_id = #{orderId,jdbcType=BIGINT},
+      product_id = #{productId,jdbcType=BIGINT},
+      quantity = #{quantity,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKeySelectiveCAS" parameterType="com.example.milktea.pojo.AdminInfoDO" >
-    update admin_info
-    <set >
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null" >
-        password = #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="freq != null" >
-        freq = #{freq,jdbcType=INTEGER},
-      </if>
-      <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="version != null" >
-        version = #{version,jdbcType=INTEGER} + 1,
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT} AND version=#{version,jdbcType=INTEGER}
-  </update>
-  <select id="login" resultMap="BaseResultMap" parameterType="com.example.milktea.pojo.AdminInfoDO" >
-    select
-    <include refid="Base_Column_List" />
-    from admin_info
-    where name = #{name,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
-  </select>
 </mapper>

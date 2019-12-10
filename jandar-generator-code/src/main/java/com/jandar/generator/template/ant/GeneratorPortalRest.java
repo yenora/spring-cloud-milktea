@@ -80,8 +80,6 @@ public class GeneratorPortalRest implements Ant{
 			bw.newLine();
 			bw.append("\tpublic Result<PageResult<"+config.getDOName()+">> page(@RequestBody SearchDTO<"+config.getDOName()+"> query) {");
 			bw.newLine();
-			bw.append("\t\tquery.getEntity().adorn();");
-			bw.newLine();
 			bw.append("\t\tPageResult<"+config.getDOName()+"> result = "+config.getDOVarible()+"FeignService.page(query);");
 			bw.newLine();
 			bw.append("\t\treturn Result.ok(result);");
@@ -93,8 +91,6 @@ public class GeneratorPortalRest implements Ant{
 			bw.append("\t@PostMapping(\"/save\")");
 			bw.newLine();
 			bw.append("\tpublic Result<String> save(@RequestBody "+config.getDOName()+" record){");
-			bw.newLine();
-			bw.append("\t\trecord.adorn();");
 			bw.newLine();
 			bw.append("\t\tif(record.getId() == null){");
 			bw.newLine();
