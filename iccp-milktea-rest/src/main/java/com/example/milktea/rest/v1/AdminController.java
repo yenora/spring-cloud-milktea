@@ -2,6 +2,8 @@ package com.example.milktea.rest.v1;
 
 import java.util.List;
 import javax.validation.Valid;
+
+import com.example.common.vo.JSONResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +102,17 @@ private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.cla
 		AdminDO result = adminService.getBy(query);
 		return ResponseEntity.ok(result);
 
+	}
+
+	@AutoLog(value="调用管理员登录接口")
+	@PostMapping("/login")
+	public ResponseEntity<JSONResultVO> login(@RequestBody @Valid AdminDO admin) throws Exception {
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("调用管理员登录接口");
+		}
+
+		JSONResultVO result = adminService.login(admin);
+		return ResponseEntity.ok(result);
 	}
 }
 

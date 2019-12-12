@@ -55,5 +55,11 @@ public class AdminFeignFallback implements AdminFeignService {
 		return new AdminDO();
 	}
 
+	@Override
+	public AdminDO login(AdminDO admin) {
+		LOGGER.error("call remote AdminFeignService  failed!");
+		return new AdminDO();
+	}
+
 
 }

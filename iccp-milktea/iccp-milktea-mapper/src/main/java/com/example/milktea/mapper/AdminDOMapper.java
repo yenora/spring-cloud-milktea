@@ -28,4 +28,6 @@ public interface AdminDOMapper {
     int updateByPrimaryKeySelective(AdminDO record);
 
     int updateByPrimaryKey(AdminDO record);
+
+    List<AdminDO> login(AdminDO adminDO);
 }

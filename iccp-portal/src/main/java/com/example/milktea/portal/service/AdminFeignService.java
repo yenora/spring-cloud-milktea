@@ -39,5 +39,6 @@ public interface AdminFeignService {
 	@PostMapping("/iccp-milk-rest/v1/admin/query/object")
 	public AdminDO getBy(@RequestBody @Valid AdminDO query);
 
-
+	@PostMapping("/iccp-milk-rest/v1/admin/login")
+	public AdminDO login(@RequestBody @Valid AdminDO admin);
 }

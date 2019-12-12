@@ -65,6 +65,11 @@ public class AdminController {
 		return Result.ok(result);
 	}
 
+	@PostMapping("/login")
+	public Result<AdminDO> login(@RequestBody @Valid AdminDO admin) {
+		AdminDO result = adminFeignService.login(admin);
+		return Result.ok(result);
+	}
 
 }
 

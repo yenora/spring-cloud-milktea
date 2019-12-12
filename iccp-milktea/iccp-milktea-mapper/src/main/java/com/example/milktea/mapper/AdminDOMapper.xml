@@ -248,4 +248,10 @@
       create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
     where id = #{id,jdbcType=BIGINT}
   </update>
+    <select id="login" resultType="com.example.milktea.pojo.AdminDO">
+      select
+      <include refid="Base_Column_List" />
+      from admin
+      where name = #{name,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+    </select>
 </mapper>
