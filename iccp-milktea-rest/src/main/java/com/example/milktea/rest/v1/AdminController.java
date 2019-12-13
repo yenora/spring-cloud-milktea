@@ -9,13 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import com.example.common.log.AutoLog;
 import com.example.common.util.PageResult;
 import com.example.milktea.pojo.AdminDO;
@@ -113,6 +107,29 @@ private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.cla
 
 		JSONResultVO result = adminService.login(admin);
 		return ResponseEntity.ok(result);
+	}
+
+
+	@AutoLog(value="调用管理员信息接口")
+	@GetMapping("/info")
+	public ResponseEntity<JSONResultVO> info(String token) throws Exception {
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("调用管理员信息接口");
+		}
+
+		JSONResultVO result = adminService.info(token);
+		return ResponseEntity.ok(result);
+	}
+
+	@AutoLog(value="调用管理员注销接口")
+	@PostMapping("/logout")
+	public ResponseEntity<JSONResultVO> logout(String token) throws Exception {
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("调用管理员注销接口");
+		}
+
+		adminService.logout(token);
+		return ResponseEntity.ok().build();
 	}
 }
 
