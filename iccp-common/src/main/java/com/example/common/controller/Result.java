@@ -1,4 +1,4 @@
-package com.example.common.result;
+package com.example.common.controller;
 
 import java.io.Serializable;
 

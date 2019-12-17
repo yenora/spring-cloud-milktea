@@ -1,21 +1,15 @@
 package com.example.milktea.pojo;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class ProductStapleDO {
     /** 产品原料ID*/
-    private Integer id;
+    private Long id;
 
     /** 产品原料名称*/
-    @Length(max = 50, message = "产品原料名称最大长度为50")
+    @Length(max = 50, message = "产品原料名称最大长度为255")
     private String name;
 
     /** 产品原料价格*/
@@ -24,11 +18,11 @@ public class ProductStapleDO {
     /** 产品原料库存量*/
     private Long stocks;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

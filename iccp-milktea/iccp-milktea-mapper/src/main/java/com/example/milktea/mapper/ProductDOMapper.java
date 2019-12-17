@@ -11,27 +11,21 @@ public interface ProductDOMapper {
 
     int deleteByExample(ProductDOExample example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(ProductDO record);
 
     int insertSelective(ProductDO record);
 
-    List<ProductDO> selectByExampleWithBLOBs(ProductDOExample example);
-
     List<ProductDO> selectByExample(ProductDOExample example);
 
-    ProductDO selectByPrimaryKey(Integer id);
+    ProductDO selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") ProductDO record, @Param("example") ProductDOExample example);
-
-    int updateByExampleWithBLOBs(@Param("record") ProductDO record, @Param("example") ProductDOExample example);
 
     int updateByExample(@Param("record") ProductDO record, @Param("example") ProductDOExample example);
 
     int updateByPrimaryKeySelective(ProductDO record);
-
-    int updateByPrimaryKeyWithBLOBs(ProductDO record);
 
     int updateByPrimaryKey(ProductDO record);
 }

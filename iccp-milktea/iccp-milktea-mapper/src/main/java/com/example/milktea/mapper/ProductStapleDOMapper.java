@@ -11,7 +11,7 @@ public interface ProductStapleDOMapper {
 
     int deleteByExample(ProductStapleDOExample example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(ProductStapleDO record);
 
@@ -19,7 +19,7 @@ public interface ProductStapleDOMapper {
 
     List<ProductStapleDO> selectByExample(ProductStapleDOExample example);
 
-    ProductStapleDO selectByPrimaryKey(Integer id);
+    ProductStapleDO selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") ProductStapleDO record, @Param("example") ProductStapleDOExample example);
 

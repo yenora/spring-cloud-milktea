@@ -43,7 +43,7 @@ public class AdminServiceImpl implements AdminService {
         AdminDOExample example = new AdminDOExample();
         Criteria criteria = example.createCriteria();
         //TODO edit your query condition
-        PageHelper.startPage(query.getPage(), query.getRows());
+        PageHelper.startPage(query.getPage(), query.getLimit());
         List<AdminDO> list = adminMapper.selectByExample(example);
         PageInfo<AdminDO> pageInfo = new PageInfo<>(list);
         return pageInfo;

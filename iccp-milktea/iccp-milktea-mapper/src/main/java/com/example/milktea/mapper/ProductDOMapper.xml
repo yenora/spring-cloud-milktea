@@ -2,16 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.milktea.mapper.ProductDOMapper" >
   <resultMap id="BaseResultMap" type="com.example.milktea.pojo.ProductDO" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="type_id" property="typeId" jdbcType="INTEGER" />
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="type_id" property="typeId" jdbcType="BIGINT" />
     <result column="staples" property="staples" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
     <result column="pic" property="pic" jdbcType="VARCHAR" />
+    <result column="recommend" property="recommend" jdbcType="INTEGER" />
+    <result column="sales" property="sales" jdbcType="BIGINT" />
     <result column="create_time" property="createTime" jdbcType="OTHER" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler" />
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.example.milktea.pojo.ProductDO" extends="BaseResultMap" >
-    <result column="introduction" property="introduction" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -110,27 +110,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, type_id, staples, name, price, pic, create_time
+    id, type_id, staples, name, price, introduction, pic, recommend, sales, create_time
   </sql>
-  <sql id="Blob_Column_List" >
-    introduction
-  </sql>
-  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.example.milktea.pojo.ProductDOExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from product
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.milktea.pojo.ProductDOExample" >
     select
     <if test="distinct" >
@@ -145,17 +126,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
-    select 
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from product
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from product
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.example.milktea.pojo.ProductDOExample" >
     delete from product
@@ -164,12 +143,16 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.example.milktea.pojo.ProductDO" >
-    insert into product (id, type_id, staples, 
-      name, price, pic, create_time, 
-      introduction)
-    values (#{id,jdbcType=INTEGER}, #{typeId,jdbcType=INTEGER}, #{staples,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{pic,jdbcType=VARCHAR}, #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}, 
-      #{introduction,jdbcType=LONGVARCHAR})
+    insert into product (id, type_id, staples,
+    name, price, introduction,
+    pic, recommend, sales,
+    create_time
+    )
+    values (#{id,jdbcType=BIGINT}, #{typeId,jdbcType=BIGINT}, #{staples,jdbcType=VARCHAR},
+    #{name,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{introduction,jdbcType=VARCHAR},
+    #{pic,jdbcType=VARCHAR}, #{recommend,jdbcType=INTEGER}, #{sales,jdbcType=BIGINT},
+    #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+    )
   </insert>
   <insert id="insertSelective" parameterType="com.example.milktea.pojo.ProductDO" >
     insert into product
@@ -189,22 +172,28 @@
       <if test="price != null" >
         price,
       </if>
+      <if test="introduction != null" >
+        introduction,
+      </if>
       <if test="pic != null" >
         pic,
+      </if>
+      <if test="recommend != null" >
+        recommend,
+      </if>
+      <if test="sales != null" >
+        sales,
       </if>
       <if test="createTime != null" >
         create_time,
       </if>
-      <if test="introduction != null" >
-        introduction,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
-        #{id,jdbcType=INTEGER},
+        #{id,jdbcType=BIGINT},
       </if>
       <if test="typeId != null" >
-        #{typeId,jdbcType=INTEGER},
+        #{typeId,jdbcType=BIGINT},
       </if>
       <if test="staples != null" >
         #{staples,jdbcType=VARCHAR},
@@ -215,14 +204,20 @@
       <if test="price != null" >
         #{price,jdbcType=DECIMAL},
       </if>
+      <if test="introduction != null" >
+        #{introduction,jdbcType=VARCHAR},
+      </if>
       <if test="pic != null" >
         #{pic,jdbcType=VARCHAR},
       </if>
+      <if test="recommend != null" >
+        #{recommend,jdbcType=INTEGER},
+      </if>
+      <if test="sales != null" >
+        #{sales,jdbcType=BIGINT},
+      </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
-      </if>
-      <if test="introduction != null" >
-        #{introduction,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -236,10 +231,10 @@
     update product
     <set >
       <if test="record.id != null" >
-        id = #{record.id,jdbcType=INTEGER},
+        id = #{record.id,jdbcType=BIGINT},
       </if>
       <if test="record.typeId != null" >
-        type_id = #{record.typeId,jdbcType=INTEGER},
+        type_id = #{record.typeId,jdbcType=BIGINT},
       </if>
       <if test="record.staples != null" >
         staples = #{record.staples,jdbcType=VARCHAR},
@@ -250,43 +245,38 @@
       <if test="record.price != null" >
         price = #{record.price,jdbcType=DECIMAL},
       </if>
+      <if test="record.introduction != null" >
+        introduction = #{record.introduction,jdbcType=VARCHAR},
+      </if>
       <if test="record.pic != null" >
         pic = #{record.pic,jdbcType=VARCHAR},
       </if>
+      <if test="record.recommend != null" >
+        recommend = #{record.recommend,jdbcType=INTEGER},
+      </if>
+      <if test="record.sales != null" >
+        sales = #{record.sales,jdbcType=BIGINT},
+      </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
-      </if>
-      <if test="record.introduction != null" >
-        introduction = #{record.introduction,jdbcType=LONGVARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map" >
-    update product
-    set id = #{record.id,jdbcType=INTEGER},
-      type_id = #{record.typeId,jdbcType=INTEGER},
-      staples = #{record.staples,jdbcType=VARCHAR},
-      name = #{record.name,jdbcType=VARCHAR},
-      price = #{record.price,jdbcType=DECIMAL},
-      pic = #{record.pic,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
-      introduction = #{record.introduction,jdbcType=LONGVARCHAR}
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
   <update id="updateByExample" parameterType="map" >
     update product
-    set id = #{record.id,jdbcType=INTEGER},
-      type_id = #{record.typeId,jdbcType=INTEGER},
-      staples = #{record.staples,jdbcType=VARCHAR},
-      name = #{record.name,jdbcType=VARCHAR},
-      price = #{record.price,jdbcType=DECIMAL},
-      pic = #{record.pic,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+    set id = #{record.id,jdbcType=BIGINT},
+    type_id = #{record.typeId,jdbcType=BIGINT},
+    staples = #{record.staples,jdbcType=VARCHAR},
+    name = #{record.name,jdbcType=VARCHAR},
+    price = #{record.price,jdbcType=DECIMAL},
+    introduction = #{record.introduction,jdbcType=VARCHAR},
+    pic = #{record.pic,jdbcType=VARCHAR},
+    recommend = #{record.recommend,jdbcType=INTEGER},
+    sales = #{record.sales,jdbcType=BIGINT},
+    create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -295,7 +285,7 @@
     update product
     <set >
       <if test="typeId != null" >
-        type_id = #{typeId,jdbcType=INTEGER},
+        type_id = #{typeId,jdbcType=BIGINT},
       </if>
       <if test="staples != null" >
         staples = #{staples,jdbcType=VARCHAR},
@@ -306,37 +296,35 @@
       <if test="price != null" >
         price = #{price,jdbcType=DECIMAL},
       </if>
+      <if test="introduction != null" >
+        introduction = #{introduction,jdbcType=VARCHAR},
+      </if>
       <if test="pic != null" >
         pic = #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="recommend != null" >
+        recommend = #{recommend,jdbcType=INTEGER},
+      </if>
+      <if test="sales != null" >
+        sales = #{sales,jdbcType=BIGINT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
       </if>
-      <if test="introduction != null" >
-        introduction = #{introduction,jdbcType=LONGVARCHAR},
-      </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.milktea.pojo.ProductDO" >
-    update product
-    set type_id = #{typeId,jdbcType=INTEGER},
-      staples = #{staples,jdbcType=VARCHAR},
-      name = #{name,jdbcType=VARCHAR},
-      price = #{price,jdbcType=DECIMAL},
-      pic = #{pic,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
-      introduction = #{introduction,jdbcType=LONGVARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.milktea.pojo.ProductDO" >
     update product
-    set type_id = #{typeId,jdbcType=INTEGER},
-      staples = #{staples,jdbcType=VARCHAR},
-      name = #{name,jdbcType=VARCHAR},
-      price = #{price,jdbcType=DECIMAL},
-      pic = #{pic,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
-    where id = #{id,jdbcType=INTEGER}
+    set type_id = #{typeId,jdbcType=BIGINT},
+    staples = #{staples,jdbcType=VARCHAR},
+    name = #{name,jdbcType=VARCHAR},
+    price = #{price,jdbcType=DECIMAL},
+    introduction = #{introduction,jdbcType=VARCHAR},
+    pic = #{pic,jdbcType=VARCHAR},
+    recommend = #{recommend,jdbcType=INTEGER},
+    sales = #{sales,jdbcType=BIGINT},
+    create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+    where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

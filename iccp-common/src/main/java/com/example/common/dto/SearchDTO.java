@@ -24,17 +24,17 @@ public class SearchDTO<T> implements Serializable {
 	
 	private Integer page;
 	
-	private Integer rows;
+	private Integer limit;
 	
-	private String orders;
+	private String sort;
 	
 	public SearchDTO(){}
 	
-	public SearchDTO(T entity, Integer page, Integer rows) {
+	public SearchDTO(T entity, Integer page, Integer limit) {
 		super();
 		this.entity = entity;
 		this.page = page;
-		this.rows = rows;
+		this.limit = limit;
 	}
 
 	

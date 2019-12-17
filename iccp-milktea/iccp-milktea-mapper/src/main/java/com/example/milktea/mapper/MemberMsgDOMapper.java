@@ -17,21 +17,15 @@ public interface MemberMsgDOMapper {
 
     int insertSelective(MemberMsgDO record);
 
-    List<MemberMsgDO> selectByExampleWithBLOBs(MemberMsgDOExample example);
-
     List<MemberMsgDO> selectByExample(MemberMsgDOExample example);
 
     MemberMsgDO selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") MemberMsgDO record, @Param("example") MemberMsgDOExample example);
 
-    int updateByExampleWithBLOBs(@Param("record") MemberMsgDO record, @Param("example") MemberMsgDOExample example);
-
     int updateByExample(@Param("record") MemberMsgDO record, @Param("example") MemberMsgDOExample example);
 
     int updateByPrimaryKeySelective(MemberMsgDO record);
-
-    int updateByPrimaryKeyWithBLOBs(MemberMsgDO record);
 
     int updateByPrimaryKey(MemberMsgDO record);
 }
