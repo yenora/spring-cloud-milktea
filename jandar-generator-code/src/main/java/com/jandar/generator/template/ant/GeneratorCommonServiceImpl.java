@@ -84,7 +84,7 @@ public class GeneratorCommonServiceImpl implements Ant{
 			bw.append("\t\t//TODO edit your query condition");
 			bw.newLine();
 			
-			bw.append("\t\tPageHelper.startPage(query.getPage(), query.getRows());");
+			bw.append("\t\tPageHelper.startPage(query.getPage(), query.getLimit());");
 			bw.newLine();
 			bw.append("\t\tList<"+config.getDOName()+"> list = "+config.getDOVarible()+"Mapper.selectByExample(example);");
 			bw.newLine();
@@ -153,9 +153,7 @@ public class GeneratorCommonServiceImpl implements Ant{
 			bw.newLine();
 			bw.append("\tpublic int updateCAS("+config.getDOName()+" record) {");
 			bw.newLine();
-			bw.append("\t\tcheckNotNull(record.getId(), \"record's id is null\");");
-			bw.newLine();
-			bw.append("\t\treturn "+config.getDOVarible()+"Mapper.updateByPrimaryKeySelectiveCAS(record);");
+			bw.append("\t\tthrow new IllegalAccessError(\"无法访问的方法\");");
 			bw.newLine();
 			bw.append("\t}");
 			

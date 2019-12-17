@@ -157,13 +157,15 @@ public class AdminServiceImpl implements AdminService {
             return JSONResultVO.builder().data(null).code(50014).msg("令牌已过期，请重新登录").build();
         }
 
+        AdminDO info = ((AdminService) AopContext.currentProxy()).getBy(
+                AdminDO.builder()
+                        .id(Long.parseLong(data.get("id").trim()))
+                        .tel(data.get("tel").trim()).build());
+
+        info.setToken(token);
+
         return JSONResultVO.builder()
-                .data(
-                        ((AdminService) AopContext.currentProxy()).getBy(
-                                AdminDO.builder()
-                                        .id(Long.parseLong(data.get("id").trim()))
-                                        .tel(data.get("tel").trim()).build())
-                )
+                .data(info)
                 .code(1)
                 .msg("获取管理员账户信息成功").build();
     }
