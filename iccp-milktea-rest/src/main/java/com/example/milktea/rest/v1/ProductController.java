@@ -60,11 +60,11 @@ private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.c
 
 	@AutoLog(value="调用产品信息删除接口")
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable("id") Long id) throws Exception {
+	public ResponseEntity<Void> delete(@PathVariable("id") String id) throws Exception {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("调用产品信息删除接口");
 		}
-		productService.delete(id);
+		productService.delete(Long.parseLong(id));
 		return ResponseEntity.ok().build();
 	}
 

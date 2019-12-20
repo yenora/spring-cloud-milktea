@@ -98,16 +98,5 @@ public class ProductTypeController {
         return ResponseEntity.ok(result);
 
     }
-
-    @AutoLog(value = "调用产品种类信息详情查询接口")
-    @PostMapping("/getById")
-    @ResponseBody
-    public ResponseEntity<ProductTypeDO> getById(@RequestParam(value = "id", defaultValue="-1") Long id) throws Exception {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("调用产品种类信息详情查询接口");
-        }
-        ProductTypeDO result = productTypeService.get(id);
-        return ResponseEntity.ok(result);
-    }
 }
 

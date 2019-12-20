@@ -97,16 +97,5 @@ private static final Logger LOGGER = LoggerFactory.getLogger(ProductStapleContro
 		ProductStapleDO result = productStapleService.getBy(query);
 		return ResponseEntity.ok(result);
 	}
-
-	@AutoLog(value = "调用产品原料信息详情查询接口")
-	@PostMapping("/getByIds")
-	@ResponseBody
-	public ResponseEntity<String> getByIds(@RequestParam(value = "ids", defaultValue="-1") String ids) throws Exception {
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("调用产品原料信息详情查询接口");
-		}
-		String result = productStapleService.getByIds(ids);
-		return ResponseEntity.ok(result);
-	}
 }
 

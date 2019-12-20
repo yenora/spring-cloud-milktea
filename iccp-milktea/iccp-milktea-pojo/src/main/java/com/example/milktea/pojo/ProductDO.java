@@ -1,6 +1,8 @@
 package com.example.milktea.pojo;
 
 import com.example.common.annotation.VOAttribute;
+import com.example.milktea.dto.ProductStapleDTO;
+import com.example.milktea.dto.ProductTypeDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
@@ -48,6 +50,12 @@ public class ProductDO {
     /** 产品介绍*/
     @Length(max = 1000, message = "产品介绍最大长度为255")
     private String introduction;
+
+    @VOAttribute
+    private ProductTypeDTO productTypeDTO;
+
+    @VOAttribute
+    private ProductStapleDTO productStapleDTO;
 
     public Long getId() {
         return id;
@@ -127,5 +135,21 @@ public class ProductDO {
 
     public void setIntroduction(String introduction) {
         this.introduction = introduction == null ? null : introduction.trim();
+    }
+
+    public ProductTypeDTO getProductTypeDTO() {
+        return productTypeDTO;
+    }
+
+    public void setProductTypeDTO(ProductTypeDTO productTypeDTO) {
+        this.productTypeDTO = productTypeDTO;
+    }
+
+    public ProductStapleDTO getProductStapleDTO() {
+        return productStapleDTO;
+    }
+
+    public void setProductStapleDTO(ProductStapleDTO productStapleDTO) {
+        this.productStapleDTO = productStapleDTO;
     }
 }

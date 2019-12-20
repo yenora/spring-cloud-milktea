@@ -93,23 +93,5 @@ public class ProductStapleServiceImpl implements ProductStapleService {
         }
         return result.get(0);
     }
-
-    @Override
-    public String getByIds(String ids) {
-        ProductStapleDOExample example = new ProductStapleDOExample();
-        Criteria criteria = example.createCriteria();
-        example.setOrderByClause("id");
-        if (StringUtils.isNotBlank(ids)) {
-            criteria.andIdIn(Arrays.stream(
-                    ids.split(","))
-                    .map(Long::parseLong).collect(Collectors.toList()));
-        }
-        List<ProductStapleDO> list = productStapleMapper.selectByExample(example);
-        StringBuffer names = new StringBuffer();
-        for (ProductStapleDO staple: list) {
-            names.append(staple.getName()).append(",");
-        }
-        return names.deleteCharAt(names.length() - 1).toString();
-    }
 }
 
