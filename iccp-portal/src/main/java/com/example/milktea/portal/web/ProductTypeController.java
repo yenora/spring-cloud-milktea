@@ -3,7 +3,7 @@ package com.example.milktea.portal.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import javax.validation.Valid;
-import com.jandar.common.controller.Result;
+import com.example.common.controller.Result;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

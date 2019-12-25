@@ -30,6 +30,14 @@ public class AdminDO {
     @Length(max = 20, message = "电话最大长度为20")
     private String tel;
 
+    /** 角色*/
+    @Length(max = 50, message = "角色最大长度为20")
+    private String role;
+
+    /** 头像*/
+    @Length(max = 255, message = "头像最大长度为20")
+    private String avatar;
+
     /** 创建时间*/
     @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -69,6 +77,22 @@ public class AdminDO {
 
     public void setTel(String tel) {
         this.tel = tel == null ? null : tel.trim();
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role == null ? null : role.trim();
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public LocalDateTime getCreateTime() {

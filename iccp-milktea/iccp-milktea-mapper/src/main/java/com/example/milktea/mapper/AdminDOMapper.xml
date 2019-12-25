@@ -1,257 +1,287 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.milktea.mapper.AdminDOMapper" >
-  <resultMap id="BaseResultMap" type="com.example.milktea.pojo.AdminDO" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="password" property="password" jdbcType="VARCHAR" />
-    <result column="tel" property="tel" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="OTHER" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler" />
-  </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
+    <resultMap id="BaseResultMap" type="com.example.milktea.pojo.AdminDO" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="tel" property="tel" jdbcType="VARCHAR" />
+        <result column="role" property="role" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="OTHER" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler" />
+        <result column="avatar" property="avatar" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Example_Where_Clause" >
+        <where >
+            <foreach collection="oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                        <foreach collection="criteria.createTimeCriteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler} and #{criterion.secondValue,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
             </foreach>
-            <foreach collection="criteria.createTimeCriteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler} and #{criterion.secondValue,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
-                  </foreach>
-                </when>
-              </choose>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause" >
+        <where >
+            <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                        <foreach collection="criteria.createTimeCriteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler} and #{criterion.secondValue,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
             </foreach>
-          </trim>
+        </where>
+    </sql>
+    <sql id="Base_Column_List" >
+    id, name, password, tel, role, create_time, avatar
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.milktea.pojo.AdminDOExample" >
+        select
+        <if test="distinct" >
+            distinct
         </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-            <foreach collection="criteria.createTimeCriteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler} and #{criterion.secondValue,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
+        <include refid="Base_Column_List" />
+        from admin
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
         </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List" >
-    id, name, password, tel, create_time
-  </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.milktea.pojo.AdminDOExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from admin
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from admin
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from admin
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.example.milktea.pojo.AdminDOExample" >
-    delete from admin
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.example.milktea.pojo.AdminDO" >
-    insert into admin (id, name, password, 
-      tel, create_time
-      )
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{tel,jdbcType=VARCHAR}, #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.example.milktea.pojo.AdminDO" >
-    insert into admin
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="name != null" >
-        name,
-      </if>
-      <if test="password != null" >
-        password,
-      </if>
-      <if test="tel != null" >
-        tel,
-      </if>
-      <if test="createTime != null" >
-        create_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null" >
-        #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="tel != null" >
-        #{tel,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.example.milktea.pojo.AdminDOExample" resultType="java.lang.Integer" >
-    select count(*) from admin
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map" >
-    update admin
-    <set >
-      <if test="record.id != null" >
-        id = #{record.id,jdbcType=BIGINT},
-      </if>
-      <if test="record.name != null" >
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+        <include refid="Base_Column_List" />
+        from admin
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from admin
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.example.milktea.pojo.AdminDOExample" >
+        delete from admin
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.example.milktea.pojo.AdminDO" >
+        insert into admin (id, name, password,
+        tel, role, create_time,
+        avatar)
+        values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+        #{tel,jdbcType=VARCHAR}, #{role,jdbcType=VARCHAR}, #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+        #{avatar,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.example.milktea.pojo.AdminDO" >
+        insert into admin
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="password != null" >
+                password,
+            </if>
+            <if test="tel != null" >
+                tel,
+            </if>
+            <if test="role != null" >
+                role,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="avatar != null" >
+                avatar,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null" >
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="tel != null" >
+                #{tel,jdbcType=VARCHAR},
+            </if>
+            <if test="role != null" >
+                #{role,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+            </if>
+            <if test="avatar != null" >
+                #{avatar,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.example.milktea.pojo.AdminDOExample" resultType="java.lang.Integer" >
+        select count(*) from admin
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map" >
+        update admin
+        <set >
+            <if test="record.id != null" >
+                id = #{record.id,jdbcType=BIGINT},
+            </if>
+            <if test="record.name != null" >
+                name = #{record.name,jdbcType=VARCHAR},
+            </if>
+            <if test="record.password != null" >
+                password = #{record.password,jdbcType=VARCHAR},
+            </if>
+            <if test="record.tel != null" >
+                tel = #{record.tel,jdbcType=VARCHAR},
+            </if>
+            <if test="record.role != null" >
+                role = #{record.role,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createTime != null" >
+                create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+            </if>
+            <if test="record.avatar != null" >
+                avatar = #{record.avatar,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map" >
+        update admin
+        set id = #{record.id,jdbcType=BIGINT},
         name = #{record.name,jdbcType=VARCHAR},
-      </if>
-      <if test="record.password != null" >
         password = #{record.password,jdbcType=VARCHAR},
-      </if>
-      <if test="record.tel != null" >
         tel = #{record.tel,jdbcType=VARCHAR},
-      </if>
-      <if test="record.createTime != null" >
+        role = #{record.role,jdbcType=VARCHAR},
         create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
-      </if>
-    </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map" >
-    update admin
-    set id = #{record.id,jdbcType=BIGINT},
-      name = #{record.name,jdbcType=VARCHAR},
-      password = #{record.password,jdbcType=VARCHAR},
-      tel = #{record.tel,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.milktea.pojo.AdminDO" >
-    update admin
-    <set >
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null" >
+        avatar = #{record.avatar,jdbcType=VARCHAR}
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.example.milktea.pojo.AdminDO" >
+        update admin
+        <set >
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null" >
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="tel != null" >
+                tel = #{tel,jdbcType=VARCHAR},
+            </if>
+            <if test="role != null" >
+                role = #{role,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+            </if>
+            <if test="avatar != null" >
+                avatar = #{avatar,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.example.milktea.pojo.AdminDO" >
+        update admin
+        set name = #{name,jdbcType=VARCHAR},
         password = #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="tel != null" >
         tel = #{tel,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null" >
+        role = #{role,jdbcType=VARCHAR},
         create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.milktea.pojo.AdminDO" >
-    update admin
-    set name = #{name,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      tel = #{tel,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+        avatar = #{avatar,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
     <select id="login" resultType="com.example.milktea.pojo.AdminDO">
-      select
-      <include refid="Base_Column_List" />
-      from admin
-      where name = #{name,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+        select
+        <include refid="Base_Column_List"/>
+        from admin
+        where name = #{name,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
     </select>
 </mapper>
