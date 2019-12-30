@@ -3,6 +3,8 @@ package com.example.milktea.service.impl;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import java.util.List;
+
+import com.example.common.vo.JSONResultVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,58 +38,79 @@ public class ProductTypeServiceImpl implements ProductTypeService{
 
 	@Override
 	@Transactional(readOnly = true)
-	public ProductTypeDO get(Long id) {
+	public JSONResultVO get(Long id) {
 		checkNotNull(id, "param id is null");
-		return productTypeMapper.selectByPrimaryKey(id);
+		return JSONResultVO.builder()
+				.data(productTypeMapper.selectByPrimaryKey(id))
+				.code(1)
+				.msg("产品种类信息详情查询成功").build();
 	}
 
 	@Override
 	@Transactional
-	public int add(ProductTypeDO record) {
-		return productTypeMapper.insertSelective(record);
+	public JSONResultVO add(ProductTypeDO record) {
+		return JSONResultVO.builder()
+				.data(productTypeMapper.insertSelective(record))
+				.code(1)
+				.msg("产品种类信息添加成功").build();
 	}
 
 	@Override
 	@Transactional
-	public int delete(Long id) {
+	public JSONResultVO delete(Long id) {
 		checkNotNull(id, "param id is null");
-		return productTypeMapper.deleteByPrimaryKey(id);
+		return JSONResultVO.builder()
+				.data(productTypeMapper.deleteByPrimaryKey(id))
+				.code(1)
+				.msg("产品种类信息删除成功").build();
 	}
 
 	@Override
 	@Transactional
-	public int update(ProductTypeDO record) {
+	public JSONResultVO update(ProductTypeDO record) {
 		checkNotNull(record.getId(), "record's id is null");
-		return productTypeMapper.updateByPrimaryKeySelective(record);
+		return JSONResultVO.builder()
+				.data(productTypeMapper.updateByPrimaryKeySelective(record))
+				.code(1)
+				.msg("产品种类信息修改成功").build();
 	}
 
 	@Override
 	@Transactional
-	public int updateCAS(ProductTypeDO record) {
+	public JSONResultVO updateCAS(ProductTypeDO record) {
 		throw new IllegalAccessError("无法访问的方法");
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<ProductTypeDO> listBy(ProductTypeDO query) {
+	public JSONResultVO listBy(ProductTypeDO query) {
 		ProductTypeDOExample example = new ProductTypeDOExample();
 		Criteria criteria = example.createCriteria();
 		//TODO edit your query condition
-		return productTypeMapper.selectByExample(example);
+		return JSONResultVO.builder()
+				.data(productTypeMapper.selectByExample(example))
+				.code(1)
+				.msg("产品种类信息列表查询成功").build();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public ProductTypeDO getBy(ProductTypeDO query) {
+	public JSONResultVO getBy(ProductTypeDO query) {
 		ProductTypeDOExample example = new ProductTypeDOExample();
 		Criteria criteria = example.createCriteria();
 		//TODO edit your query condition
 		List<ProductTypeDO> result = productTypeMapper.selectByExample(example);
 		checkState(result.size()<2, "multy result by query");
 		if(result.isEmpty()){
-			return null;
+			return JSONResultVO.builder()
+					.data(null)
+					.code(-1)
+					.msg("产品种类信息列表查询失败").build();
 		}
-		return result.get(0);
+		return JSONResultVO.builder()
+				.data(result.get(0))
+				.code(1)
+				.msg("产品种类信息列表查询成功").build();
 	}
 }
 

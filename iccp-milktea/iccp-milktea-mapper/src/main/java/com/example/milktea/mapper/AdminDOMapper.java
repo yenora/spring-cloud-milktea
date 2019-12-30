@@ -29,5 +29,7 @@ public interface AdminDOMapper {
 
     int updateByPrimaryKey(AdminDO record);
 
+    List<String> selectAdminNameList();
+
     List<AdminDO> login(AdminDO adminDO);
 }

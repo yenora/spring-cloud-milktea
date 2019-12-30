@@ -1,7 +1,10 @@
 package com.example.common.service;
 
+import com.example.common.vo.JSONResultVO;
 import com.github.pagehelper.PageInfo;
 import com.example.common.dto.SearchDTO;
+
+import java.util.List;
 
 /**
  * @Description: 统一的抽象方法接口，所有的服务类都要实现这个接口
@@ -12,19 +15,19 @@ import com.example.common.dto.SearchDTO;
 public interface AbstractService<T> {
     String LIKE = "%";
 
-    T get(java.lang.Long aLong);
-
-    int add(T t);
-
-    int update(T t);
-
-    int updateCAS(T t);
-
-    int delete(java.lang.Long aLong);
-
     PageInfo<T> pageList(SearchDTO<T> searchDTO);
 
-    java.util.List<T> listBy(T t);
+    JSONResultVO get(Long aLong);
 
-    T getBy(T t);
+    JSONResultVO add(T t);
+
+    JSONResultVO update(T t);
+
+    JSONResultVO updateCAS(T t);
+
+    JSONResultVO delete(Long aLong);
+
+    JSONResultVO listBy(T t);
+
+    JSONResultVO getBy(T t);
 }

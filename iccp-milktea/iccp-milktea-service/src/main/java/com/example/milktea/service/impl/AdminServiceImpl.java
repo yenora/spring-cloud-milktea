@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -32,10 +33,12 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private AdminDOMapper adminMapper;
 
-    @Value("${admin.key:aaaabbbbccccdddd}")
+    @Value("${token.key:DKfBOcdEoRMxcPOi}")
     private String key;
-    @Value("${admin.iv:1234567887654321}")
+    @Value("${token.iv:2019120120200630}")
     private String iv;
+    @Value("${registry.avatar:http://127.0.0.1:5000/spring-cloud-milktea/default/avatar.gif}")
+    private String avatar;
 
     @Override
     @Transactional(readOnly = true)
@@ -51,49 +54,78 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional(readOnly = true)
-    public AdminDO get(Long id) {
+    public JSONResultVO get(Long id) {
         checkNotNull(id, "param id is null");
-        return adminMapper.selectByPrimaryKey(id);
+        return JSONResultVO.builder()
+                .data(adminMapper.selectByPrimaryKey(id))
+                .code(1)
+                .msg("管理员信息详情查询成功").build();
     }
 
     @Override
     @Transactional
-    public int add(AdminDO record) {
-        return adminMapper.insertSelective(record);
+    public JSONResultVO add(AdminDO record) {
+        if (record.getCreateTime() == null) {
+            record.setCreateTime(LocalDateTime.now());
+        }
+        if (record.getAvatar() == null) {
+            record.setAvatar(avatar);
+        }
+        return JSONResultVO.builder()
+                .data(adminMapper.insertSelective(record))
+                .code(1)
+                .msg("管理员信息添加成功").build();
     }
 
     @Override
     @Transactional
-    public int delete(Long id) {
+    public JSONResultVO delete(Long id) {
         checkNotNull(id, "param id is null");
-        return adminMapper.deleteByPrimaryKey(id);
+        return JSONResultVO.builder()
+                .data(adminMapper.deleteByPrimaryKey(id))
+                .code(1)
+                .msg("管理员信息删除成功").build();
     }
 
     @Override
     @Transactional
-    public int update(AdminDO record) {
+    public JSONResultVO update(AdminDO record) {
         checkNotNull(record.getId(), "record's id is null");
-        return adminMapper.updateByPrimaryKeySelective(record);
+        if (adminMapper.updateByPrimaryKeySelective(record) > 0) {
+            record.setToken(generateToken(record));
+            return JSONResultVO.builder()
+                    .data(record)
+                    .code(1)
+                    .msg("管理员信息修改成功").build();
+        } else {
+            return JSONResultVO.builder()
+                    .data(record)
+                    .code(-1)
+                    .msg("管理员信息修改失败").build();
+        }
     }
 
     @Override
     @Transactional
-    public int updateCAS(AdminDO record) {
+    public JSONResultVO updateCAS(AdminDO record) {
         throw new IllegalAccessError("无法访问的方法");
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<AdminDO> listBy(AdminDO query) {
+    public JSONResultVO listBy(AdminDO query) {
         AdminDOExample example = new AdminDOExample();
         Criteria criteria = example.createCriteria();
         //TODO edit your query condition
-        return adminMapper.selectByExample(example);
+        return JSONResultVO.builder()
+                .data(adminMapper.selectByExample(example))
+                .code(1)
+                .msg("管理员信息列表查询成功").build();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public AdminDO getBy(AdminDO query) {
+    public JSONResultVO getBy(AdminDO query) {
         AdminDOExample example = new AdminDOExample();
         Criteria criteria = example.createCriteria();
         if (query.getId() != null) {
@@ -105,9 +137,30 @@ public class AdminServiceImpl implements AdminService {
         List<AdminDO> result = adminMapper.selectByExample(example);
         checkState(result.size() < 2, "multy result by query");
         if (result.isEmpty()) {
-            return null;
+            JSONResultVO.builder()
+                    .data(null)
+                    .code(-1)
+                    .msg("管理员信息列表查询不到此记录").build();
         }
-        return result.get(0);
+        return JSONResultVO.builder()
+                .data(result.get(0))
+                .code(1)
+                .msg("管理员信息列表查询成功").build();
+    }
+
+    @Override
+    public JSONResultVO getNameArray(String key) {
+        if (this.key.equals(key)) {
+            return JSONResultVO.builder()
+                    .data(adminMapper.selectAdminNameList().toArray())
+                    .code(1)
+                    .msg("获取管理员账号列表成功").build();
+        } else {
+            return JSONResultVO.builder()
+                    .data("")
+                    .code(-1)
+                    .msg("秘钥错误，获取管理员账号列表失败").build();
+        }
     }
 
     @Override
@@ -122,17 +175,7 @@ public class AdminServiceImpl implements AdminService {
         }
 
         AdminDO adminDO = result.get(0);
-        adminDO.setToken(AESUtils.encryptByCS7(
-                JsonUtils.objectToJson(
-                        new GenericMap.Builder<String, String>()
-                                .put("id", adminDO.getId().toString())
-                                .put("tel", adminDO.getTel())
-                                .put("stamp", Instant.now()
-                                        .plusMillis(TimeUnit.HOURS.toMillis(8))
-                                        .getEpochSecond() + "")
-                                .builder().map()),
-                key,
-                iv));
+        adminDO.setToken(generateToken(adminDO));
 
         return JSONResultVO.builder()
                 .code(1)
@@ -157,22 +200,29 @@ public class AdminServiceImpl implements AdminService {
             return JSONResultVO.builder().data(null).code(50014).msg("令牌已过期，请重新登录").build();
         }
 
-        AdminDO info = ((AdminService) AopContext.currentProxy()).getBy(
+        return ((AdminService) AopContext.currentProxy()).getBy(
                 AdminDO.builder()
                         .id(Long.parseLong(data.get("id").trim()))
                         .tel(data.get("tel").trim()).build());
-
-        info.setToken(token);
-
-        return JSONResultVO.builder()
-                .data(info)
-                .code(1)
-                .msg("获取管理员账户信息成功").build();
     }
 
     @Override
     public void logout(String token) {
         // 注销账户，暂时没想好怎么写，写搞个空接口
+    }
+
+    public String generateToken(AdminDO record) {
+        return AESUtils.encryptByCS7(
+                JsonUtils.objectToJson(
+                        new GenericMap.Builder<String, String>()
+                                .put("id", record.getId().toString())
+                                .put("tel", record.getTel())
+                                .put("stamp", Instant.now()
+                                        .plusMillis(TimeUnit.HOURS.toMillis(8))
+                                        .getEpochSecond() + "")
+                                .builder().map()),
+                key,
+                iv);
     }
 }
 

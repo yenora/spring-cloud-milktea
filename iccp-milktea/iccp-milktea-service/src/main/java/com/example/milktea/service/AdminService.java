@@ -7,6 +7,14 @@ import com.example.milktea.pojo.AdminDO;
 public interface AdminService extends AbstractService<AdminDO>{
 
     /**
+     * 获取管理员账号列表
+     *
+     * @param key key
+     * @return json字符串
+     */
+    JSONResultVO getNameArray(String key);
+
+    /**
      * 登录
      *
      * @param adminDO adminDO

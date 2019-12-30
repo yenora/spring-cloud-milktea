@@ -6,6 +6,7 @@ import static com.google.common.base.Preconditions.checkState;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.common.vo.JSONResultVO;
 import com.example.milktea.dto.ProductStapleDTO;
 import com.example.milktea.dto.ProductTypeDTO;
 import com.example.milktea.mapper.ProductStapleDOMapper;
@@ -80,58 +81,79 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public ProductDO get(Long id) {
+    public JSONResultVO get(Long id) {
         checkNotNull(id, "param id is null");
-        return productMapper.selectByPrimaryKey(id);
+        return JSONResultVO.builder()
+                .data(productMapper.selectByPrimaryKey(id))
+                .code(1)
+                .msg("产品信息详情查询成功").build();
     }
 
     @Override
     @Transactional
-    public int add(ProductDO record) {
-        return productMapper.insertSelective(record);
+    public JSONResultVO add(ProductDO record) {
+        return JSONResultVO.builder()
+                .data(productMapper.insertSelective(record))
+                .code(1)
+                .msg("产品信息添加成功").build();
     }
 
     @Override
     @Transactional
-    public int delete(Long id) {
+    public JSONResultVO delete(Long id) {
         checkNotNull(id, "param id is null");
-        return productMapper.deleteByPrimaryKey(id);
+        return JSONResultVO.builder()
+                .data(productMapper.deleteByPrimaryKey(id))
+                .code(1)
+                .msg("产品信息删除成功").build();
     }
 
     @Override
     @Transactional
-    public int update(ProductDO record) {
+    public JSONResultVO update(ProductDO record) {
         checkNotNull(record.getId(), "record's id is null");
-        return productMapper.updateByPrimaryKeySelective(record);
+        return JSONResultVO.builder()
+                .data(productMapper.updateByPrimaryKeySelective(record))
+                .code(1)
+                .msg("产品信息修改成功").build();
     }
 
     @Override
     @Transactional
-    public int updateCAS(ProductDO record) {
+    public JSONResultVO updateCAS(ProductDO record) {
         throw new IllegalAccessError("无法访问的方法");
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProductDO> listBy(ProductDO query) {
+    public JSONResultVO listBy(ProductDO query) {
         ProductDOExample example = new ProductDOExample();
         Criteria criteria = example.createCriteria();
         //TODO edit your query condition
-        return productMapper.selectByExample(example);
+        return JSONResultVO.builder()
+                .data(productMapper.selectByExample(example))
+                .code(1)
+                .msg("产品信息列表查询成功").build();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ProductDO getBy(ProductDO query) {
+    public JSONResultVO getBy(ProductDO query) {
         ProductDOExample example = new ProductDOExample();
         Criteria criteria = example.createCriteria();
         //TODO edit your query condition
         List<ProductDO> result = productMapper.selectByExample(example);
         checkState(result.size() < 2, "multy result by query");
         if (result.isEmpty()) {
-            return null;
+            return JSONResultVO.builder()
+                    .data(null)
+                    .code(-1)
+                    .msg("产品信息列表查询失败").build();
         }
-        return result.get(0);
+        return JSONResultVO.builder()
+                .data(result.get(0))
+                .code(1)
+                .msg("产品信息列表查询成功").build();
     }
 }
 

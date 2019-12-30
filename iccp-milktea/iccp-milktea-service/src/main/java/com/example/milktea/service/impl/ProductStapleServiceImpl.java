@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.common.vo.JSONResultVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,58 +41,79 @@ public class ProductStapleServiceImpl implements ProductStapleService {
 
     @Override
     @Transactional(readOnly = true)
-    public ProductStapleDO get(Long id) {
+    public JSONResultVO get(Long id) {
         checkNotNull(id, "param id is null");
-        return productStapleMapper.selectByPrimaryKey(id);
+        return JSONResultVO.builder()
+                .data(productStapleMapper.selectByPrimaryKey(id))
+                .code(1)
+                .msg("产品原料信息详情查询成功").build();
     }
 
     @Override
     @Transactional
-    public int add(ProductStapleDO record) {
-        return productStapleMapper.insertSelective(record);
+    public JSONResultVO add(ProductStapleDO record) {
+        return JSONResultVO.builder()
+                .data(productStapleMapper.insertSelective(record))
+                .code(1)
+                .msg("产品原料信息添加成功").build();
     }
 
     @Override
     @Transactional
-    public int delete(Long id) {
+    public JSONResultVO delete(Long id) {
         checkNotNull(id, "param id is null");
-        return productStapleMapper.deleteByPrimaryKey(id);
+        return JSONResultVO.builder()
+                .data(productStapleMapper.deleteByPrimaryKey(id))
+                .code(1)
+                .msg("产品原料信息删除成功").build();
     }
 
     @Override
     @Transactional
-    public int update(ProductStapleDO record) {
+    public JSONResultVO update(ProductStapleDO record) {
         checkNotNull(record.getId(), "record's id is null");
-        return productStapleMapper.updateByPrimaryKeySelective(record);
+        return JSONResultVO.builder()
+                .data(productStapleMapper.updateByPrimaryKeySelective(record))
+                .code(1)
+                .msg("产品原料信息修改成功").build();
     }
 
     @Override
     @Transactional
-    public int updateCAS(ProductStapleDO record) {
+    public JSONResultVO updateCAS(ProductStapleDO record) {
         throw new IllegalAccessError("无法访问的方法");
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProductStapleDO> listBy(ProductStapleDO query) {
+    public JSONResultVO listBy(ProductStapleDO query) {
         ProductStapleDOExample example = new ProductStapleDOExample();
         Criteria criteria = example.createCriteria();
         //TODO edit your query condition
-        return productStapleMapper.selectByExample(example);
+        return JSONResultVO.builder()
+                .data(productStapleMapper.selectByExample(example))
+                .code(1)
+                .msg("产品原料信息列表查询成功").build();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ProductStapleDO getBy(ProductStapleDO query) {
+    public JSONResultVO getBy(ProductStapleDO query) {
         ProductStapleDOExample example = new ProductStapleDOExample();
         Criteria criteria = example.createCriteria();
         //TODO edit your query condition
         List<ProductStapleDO> result = productStapleMapper.selectByExample(example);
         checkState(result.size() < 2, "multy result by query");
         if (result.isEmpty()) {
-            return null;
+            return JSONResultVO.builder()
+                    .data(null)
+                    .code(-1)
+                    .msg("产品原料信息列表查询失败").build();
         }
-        return result.get(0);
+        return JSONResultVO.builder()
+                .data(result.get(0))
+                .code(1)
+                .msg("产品原料信息列表查询成功").build();
     }
 }
 
