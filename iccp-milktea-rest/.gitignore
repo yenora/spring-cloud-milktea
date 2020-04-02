@@ -5,3 +5,5 @@
 /.settings/
 /.apt_generated/
 /.idea/
+/.rebel.xml/
+/.rebel.remote.xml/
