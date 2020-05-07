@@ -5,7 +5,7 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="order_id" property="orderId" jdbcType="BIGINT" />
     <result column="product_id" property="productId" jdbcType="BIGINT" />
-    <result column="quantity" property="quantity" jdbcType="BIGINT" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -83,7 +83,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from order_detail
     where id = #{id,jdbcType=BIGINT}
@@ -99,10 +99,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.example.milktea.pojo.OrderDetailDO" >
-    insert into order_detail (id, order_id, product_id, 
-      quantity)
-    values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, 
-      #{quantity,jdbcType=BIGINT})
+    insert into order_detail (id, order_id, product_id,
+    quantity)
+    values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT},
+    #{quantity,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.example.milktea.pojo.OrderDetailDO" >
     insert into order_detail
@@ -131,7 +131,7 @@
         #{productId,jdbcType=BIGINT},
       </if>
       <if test="quantity != null" >
-        #{quantity,jdbcType=BIGINT},
+        #{quantity,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -154,7 +154,7 @@
         product_id = #{record.productId,jdbcType=BIGINT},
       </if>
       <if test="record.quantity != null" >
-        quantity = #{record.quantity,jdbcType=BIGINT},
+        quantity = #{record.quantity,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -164,9 +164,9 @@
   <update id="updateByExample" parameterType="map" >
     update order_detail
     set id = #{record.id,jdbcType=BIGINT},
-      order_id = #{record.orderId,jdbcType=BIGINT},
-      product_id = #{record.productId,jdbcType=BIGINT},
-      quantity = #{record.quantity,jdbcType=BIGINT}
+    order_id = #{record.orderId,jdbcType=BIGINT},
+    product_id = #{record.productId,jdbcType=BIGINT},
+    quantity = #{record.quantity,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -181,7 +181,7 @@
         product_id = #{productId,jdbcType=BIGINT},
       </if>
       <if test="quantity != null" >
-        quantity = #{quantity,jdbcType=BIGINT},
+        quantity = #{quantity,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -189,8 +189,8 @@
   <update id="updateByPrimaryKey" parameterType="com.example.milktea.pojo.OrderDetailDO" >
     update order_detail
     set order_id = #{orderId,jdbcType=BIGINT},
-      product_id = #{productId,jdbcType=BIGINT},
-      quantity = #{quantity,jdbcType=BIGINT}
+    product_id = #{productId,jdbcType=BIGINT},
+    quantity = #{quantity,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

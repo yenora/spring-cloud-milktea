@@ -4,7 +4,9 @@
   <resultMap id="BaseResultMap" type="com.example.milktea.pojo.ProductTypeDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="description" property="description" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.example.milktea.pojo.ProductTypeDO" extends="BaseResultMap" >
+    <result column="description" property="description" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -65,8 +67,27 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, name, description
+    id, name
   </sql>
+  <sql id="Blob_Column_List" >
+    description
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.example.milktea.pojo.ProductTypeDOExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from product_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.milktea.pojo.ProductTypeDOExample" >
     select
     <if test="distinct" >
@@ -81,9 +102,11 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
     select
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from product_type
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -100,7 +123,7 @@
   <insert id="insert" parameterType="com.example.milktea.pojo.ProductTypeDO" >
     insert into product_type (id, name, description
     )
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=LONGVARCHAR}
     )
   </insert>
   <insert id="insertSelective" parameterType="com.example.milktea.pojo.ProductTypeDO" >
@@ -124,7 +147,7 @@
         #{name,jdbcType=VARCHAR},
       </if>
       <if test="description != null" >
-        #{description,jdbcType=VARCHAR},
+        #{description,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -144,9 +167,18 @@
         name = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.description != null" >
-        description = #{record.description,jdbcType=VARCHAR},
+        description = #{record.description,jdbcType=LONGVARCHAR},
       </if>
     </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update product_type
+    set id = #{record.id,jdbcType=BIGINT},
+    name = #{record.name,jdbcType=VARCHAR},
+    description = #{record.description,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -154,8 +186,7 @@
   <update id="updateByExample" parameterType="map" >
     update product_type
     set id = #{record.id,jdbcType=BIGINT},
-    name = #{record.name,jdbcType=VARCHAR},
-    description = #{record.description,jdbcType=VARCHAR}
+    name = #{record.name,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -167,15 +198,20 @@
         name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="description != null" >
-        description = #{description,jdbcType=VARCHAR},
+        description = #{description,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.milktea.pojo.ProductTypeDO" >
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.milktea.pojo.ProductTypeDO" >
     update product_type
     set name = #{name,jdbcType=VARCHAR},
-    description = #{description,jdbcType=VARCHAR}
+    description = #{description,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.milktea.pojo.ProductTypeDO" >
+    update product_type
+    set name = #{name,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

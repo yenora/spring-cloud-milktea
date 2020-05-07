@@ -22,7 +22,7 @@ public class OrderDetailDO {
     private Long productId;
 
     /** 数量*/
-    private Long quantity;
+    private Integer quantity;
 
     public Long getId() {
         return id;
@@ -48,11 +48,11 @@ public class OrderDetailDO {
         this.productId = productId;
     }
 
-    public Long getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Long quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 }

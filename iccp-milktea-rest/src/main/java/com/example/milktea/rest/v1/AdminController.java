@@ -1,6 +1,5 @@
 package com.example.milktea.rest.v1;
 
-import java.util.List;
 import javax.validation.Valid;
 
 import com.example.common.vo.JSONResultVO;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.example.common.log.AutoLog;
-import com.example.common.util.PageResult;
 import com.example.milktea.pojo.AdminDO;
 import com.example.milktea.service.AdminService;
 import com.example.common.dto.SearchDTO;
@@ -26,12 +24,12 @@ public class AdminController {
 
     @AutoLog(value = "调用管理员信息分页列表查询接口")
     @PostMapping("/pageResult")
-    public ResponseEntity<PageResult<AdminDO>> pageResult(@RequestBody SearchDTO<AdminDO> query) throws Exception {
+    public ResponseEntity<JSONResultVO> pageResult(@RequestBody SearchDTO<AdminDO> query) throws Exception {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("调用管理员信息分页列表查询接口");
         }
-        PageResult<AdminDO> pageResult = PageResult.build(adminService.pageList(query));
-        return ResponseEntity.ok(pageResult);
+        JSONResultVO result = adminService.pageList(query);
+        return ResponseEntity.ok(result);
     }
 
     @AutoLog(value = "调用管理员信息添加接口")
@@ -66,17 +64,6 @@ public class AdminController {
 
     }
 
-    @AutoLog(value = "调用管理员信息接口")
-    @GetMapping("/array/name")
-    public ResponseEntity<JSONResultVO> getNameArray(String key) throws Exception {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("调用管理员信息接口");
-        }
-
-        JSONResultVO result = adminService.getNameArray(key);
-        return ResponseEntity.ok(result);
-    }
-
     @AutoLog(value = "调用管理员登录接口")
     @PostMapping("/login")
     public ResponseEntity<JSONResultVO> login(@RequestBody @Valid AdminDO admin) throws Exception {
@@ -107,8 +94,8 @@ public class AdminController {
             LOGGER.info("调用管理员注销接口");
         }
 
-        adminService.logout(token);
-        return ResponseEntity.ok().build();
+        JSONResultVO result = adminService.logout(token);
+        return ResponseEntity.ok(result);
     }
 }
 

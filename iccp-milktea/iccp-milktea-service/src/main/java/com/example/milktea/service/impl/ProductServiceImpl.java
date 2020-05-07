@@ -1,11 +1,15 @@
 package com.example.milktea.service.impl;
 
+import static com.example.common.vo.JSONResultVO.CODE_SUCCESS;
+import static com.example.common.vo.JSONResultVO.CODE_ERROR;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.common.util.PageResult;
 import com.example.common.vo.JSONResultVO;
 import com.example.milktea.dto.ProductStapleDTO;
 import com.example.milktea.dto.ProductTypeDTO;
@@ -37,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public PageInfo<ProductDO> pageList(SearchDTO<ProductDO> query) {
+    public JSONResultVO pageList(SearchDTO<ProductDO> query) {
         ProductDOExample proExample = new ProductDOExample();
         ProductStapleDOExample stapleExample = new ProductStapleDOExample();
         ProductTypeDOExample typeExample = new ProductTypeDOExample();
@@ -76,7 +80,10 @@ public class ProductServiceImpl implements ProductService {
             }
             productDO.setProductStapleDTO(new ProductStapleDTO(ids.toArray(new Long[ids.size()]), names.toArray(new String[names.size()])));
         }
-        return new PageInfo<>(prolist);
+        return JSONResultVO.builder()
+                .data(PageResult.build(new PageInfo<>(prolist)))
+                .code(CODE_SUCCESS)
+                .message("产品信息分页列表查询成功").build();
     }
 
     @Override
@@ -85,37 +92,37 @@ public class ProductServiceImpl implements ProductService {
         checkNotNull(id, "param id is null");
         return JSONResultVO.builder()
                 .data(productMapper.selectByPrimaryKey(id))
-                .code(1)
-                .msg("产品信息详情查询成功").build();
+                .code(CODE_SUCCESS)
+                .message("产品信息详情查询成功").build();
     }
 
     @Override
     @Transactional
     public JSONResultVO add(ProductDO record) {
+        productMapper.insertSelective(record);
         return JSONResultVO.builder()
-                .data(productMapper.insertSelective(record))
-                .code(1)
-                .msg("产品信息添加成功").build();
+                .code(CODE_SUCCESS)
+                .message("产品信息添加成功").build();
     }
 
     @Override
     @Transactional
     public JSONResultVO delete(Long id) {
         checkNotNull(id, "param id is null");
+        productMapper.deleteByPrimaryKey(id);
         return JSONResultVO.builder()
-                .data(productMapper.deleteByPrimaryKey(id))
-                .code(1)
-                .msg("产品信息删除成功").build();
+                .code(CODE_SUCCESS)
+                .message("产品信息删除成功").build();
     }
 
     @Override
     @Transactional
     public JSONResultVO update(ProductDO record) {
         checkNotNull(record.getId(), "record's id is null");
+        productMapper.updateByPrimaryKeySelective(record);
         return JSONResultVO.builder()
-                .data(productMapper.updateByPrimaryKeySelective(record))
-                .code(1)
-                .msg("产品信息修改成功").build();
+                .code(CODE_SUCCESS)
+                .message("产品信息修改成功").build();
     }
 
     @Override
@@ -132,8 +139,8 @@ public class ProductServiceImpl implements ProductService {
         //TODO edit your query condition
         return JSONResultVO.builder()
                 .data(productMapper.selectByExample(example))
-                .code(1)
-                .msg("产品信息列表查询成功").build();
+                .code(CODE_SUCCESS)
+                .message("产品信息列表查询成功").build();
     }
 
     @Override
@@ -146,14 +153,13 @@ public class ProductServiceImpl implements ProductService {
         checkState(result.size() < 2, "multy result by query");
         if (result.isEmpty()) {
             return JSONResultVO.builder()
-                    .data(null)
-                    .code(-1)
-                    .msg("产品信息列表查询失败").build();
+                    .code(CODE_ERROR)
+                    .message("产品信息列表查询失败").build();
         }
         return JSONResultVO.builder()
                 .data(result.get(0))
-                .code(1)
-                .msg("产品信息列表查询成功").build();
+                .code(CODE_SUCCESS)
+                .message("产品信息列表查询成功").build();
     }
 }
 

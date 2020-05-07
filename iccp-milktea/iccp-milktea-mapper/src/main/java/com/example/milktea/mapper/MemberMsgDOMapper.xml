@@ -5,8 +5,10 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="member_id" property="memberId" jdbcType="BIGINT" />
     <result column="product_id" property="productId" jdbcType="BIGINT" />
-    <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="OTHER" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.example.milktea.pojo.MemberMsgDO" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -105,8 +107,27 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, member_id, product_id, content, create_time
+    id, member_id, product_id, create_time
   </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.example.milktea.pojo.MemberMsgDOExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from member_msg
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.milktea.pojo.MemberMsgDOExample" >
     select
     <if test="distinct" >
@@ -121,9 +142,11 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
     select
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from member_msg
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -139,11 +162,11 @@
   </delete>
   <insert id="insert" parameterType="com.example.milktea.pojo.MemberMsgDO" >
     insert into member_msg (id, member_id, product_id,
-    content, create_time
-    )
+    create_time,
+    content)
     values (#{id,jdbcType=BIGINT}, #{memberId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT},
-    #{content,jdbcType=VARCHAR}, #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
-    )
+    #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+    #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.milktea.pojo.MemberMsgDO" >
     insert into member_msg
@@ -157,11 +180,11 @@
       <if test="productId != null" >
         product_id,
       </if>
-      <if test="content != null" >
-        content,
-      </if>
       <if test="createTime != null" >
         create_time,
+      </if>
+      <if test="content != null" >
+        content,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -174,11 +197,11 @@
       <if test="productId != null" >
         #{productId,jdbcType=BIGINT},
       </if>
-      <if test="content != null" >
-        #{content,jdbcType=VARCHAR},
-      </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -200,13 +223,24 @@
       <if test="record.productId != null" >
         product_id = #{record.productId,jdbcType=BIGINT},
       </if>
-      <if test="record.content != null" >
-        content = #{record.content,jdbcType=VARCHAR},
-      </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
       </if>
+      <if test="record.content != null" >
+        content = #{record.content,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update member_msg
+    set id = #{record.id,jdbcType=BIGINT},
+    member_id = #{record.memberId,jdbcType=BIGINT},
+    product_id = #{record.productId,jdbcType=BIGINT},
+    create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+    content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -216,7 +250,6 @@
     set id = #{record.id,jdbcType=BIGINT},
     member_id = #{record.memberId,jdbcType=BIGINT},
     product_id = #{record.productId,jdbcType=BIGINT},
-    content = #{record.content,jdbcType=VARCHAR},
     create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -231,20 +264,27 @@
       <if test="productId != null" >
         product_id = #{productId,jdbcType=BIGINT},
       </if>
-      <if test="content != null" >
-        content = #{content,jdbcType=VARCHAR},
-      </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
       </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.milktea.pojo.MemberMsgDO" >
+    update member_msg
+    set member_id = #{memberId,jdbcType=BIGINT},
+    product_id = #{productId,jdbcType=BIGINT},
+    create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+    content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.milktea.pojo.MemberMsgDO" >
     update member_msg
     set member_id = #{memberId,jdbcType=BIGINT},
     product_id = #{productId,jdbcType=BIGINT},
-    content = #{content,jdbcType=VARCHAR},
     create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
     where id = #{id,jdbcType=BIGINT}
   </update>

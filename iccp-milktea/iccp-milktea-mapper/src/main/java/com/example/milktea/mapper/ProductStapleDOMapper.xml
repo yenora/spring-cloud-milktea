@@ -5,7 +5,7 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="price" property="price" jdbcType="DECIMAL" />
-    <result column="stocks" property="stocks" jdbcType="BIGINT" />
+    <result column="stocks" property="stocks" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -83,7 +83,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from product_staple
     where id = #{id,jdbcType=BIGINT}
@@ -99,10 +99,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.example.milktea.pojo.ProductStapleDO" >
-    insert into product_staple (id, name, price, 
-      stocks)
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
-      #{stocks,jdbcType=BIGINT})
+    insert into product_staple (id, name, price,
+    stocks)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL},
+    #{stocks,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.example.milktea.pojo.ProductStapleDO" >
     insert into product_staple
@@ -131,7 +131,7 @@
         #{price,jdbcType=DECIMAL},
       </if>
       <if test="stocks != null" >
-        #{stocks,jdbcType=BIGINT},
+        #{stocks,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -154,7 +154,7 @@
         price = #{record.price,jdbcType=DECIMAL},
       </if>
       <if test="record.stocks != null" >
-        stocks = #{record.stocks,jdbcType=BIGINT},
+        stocks = #{record.stocks,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -164,9 +164,9 @@
   <update id="updateByExample" parameterType="map" >
     update product_staple
     set id = #{record.id,jdbcType=BIGINT},
-      name = #{record.name,jdbcType=VARCHAR},
-      price = #{record.price,jdbcType=DECIMAL},
-      stocks = #{record.stocks,jdbcType=BIGINT}
+    name = #{record.name,jdbcType=VARCHAR},
+    price = #{record.price,jdbcType=DECIMAL},
+    stocks = #{record.stocks,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -181,7 +181,7 @@
         price = #{price,jdbcType=DECIMAL},
       </if>
       <if test="stocks != null" >
-        stocks = #{stocks,jdbcType=BIGINT},
+        stocks = #{stocks,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -189,8 +189,8 @@
   <update id="updateByPrimaryKey" parameterType="com.example.milktea.pojo.ProductStapleDO" >
     update product_staple
     set name = #{name,jdbcType=VARCHAR},
-      price = #{price,jdbcType=DECIMAL},
-      stocks = #{stocks,jdbcType=BIGINT}
+    price = #{price,jdbcType=DECIMAL},
+    stocks = #{stocks,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -11,7 +11,6 @@ public class ProductTypeDO {
     private String name;
 
     /** 产品种类描述*/
-    @Length(max = 1000, message = "产品介绍最大长度为255")
     private String description;
 
     public Long getId() {

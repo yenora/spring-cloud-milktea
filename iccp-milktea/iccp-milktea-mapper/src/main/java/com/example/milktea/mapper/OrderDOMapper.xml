@@ -4,10 +4,9 @@
   <resultMap id="BaseResultMap" type="com.example.milktea.pojo.OrderDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="order_id" property="orderId" jdbcType="VARCHAR" />
-    <result column="order_detail_id" property="orderDetailId" jdbcType="INTEGER" />
     <result column="member_id" property="memberId" jdbcType="BIGINT" />
     <result column="amout" property="amout" jdbcType="DECIMAL" />
-    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="OTHER" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler" />
     <result column="notes" property="notes" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -30,6 +29,25 @@
                   and ${criterion.condition}
                   <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
                     #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.createTimeCriteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler} and #{criterion.secondValue,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
                   </foreach>
                 </when>
               </choose>
@@ -63,13 +81,32 @@
                 </when>
               </choose>
             </foreach>
+            <foreach collection="criteria.createTimeCriteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler} and #{criterion.secondValue,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
           </trim>
         </if>
       </foreach>
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, order_id, order_detail_id, member_id, amout, create_date, notes
+    id, order_id, member_id, amout, create_time, notes
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.milktea.pojo.OrderDOExample" >
     select
@@ -102,12 +139,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.example.milktea.pojo.OrderDO" >
-    insert into order (id, order_id, order_detail_id,
-      member_id, amout, create_date,
-      notes)
-    values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR}, #{orderDetailId,jdbcType=INTEGER},
-      #{memberId,jdbcType=BIGINT}, #{amout,jdbcType=DECIMAL}, #{createDate,jdbcType=TIMESTAMP},
-      #{notes,jdbcType=VARCHAR})
+    insert into order (id, order_id, member_id,
+    amout, create_time,
+    notes)
+    values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR}, #{memberId,jdbcType=BIGINT},
+    #{amout,jdbcType=DECIMAL}, #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+    #{notes,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.milktea.pojo.OrderDO" >
     insert into order
@@ -118,17 +155,14 @@
       <if test="orderId != null" >
         order_id,
       </if>
-      <if test="orderDetailId != null" >
-        order_detail_id,
-      </if>
       <if test="memberId != null" >
         member_id,
       </if>
       <if test="amout != null" >
         amout,
       </if>
-      <if test="createDate != null" >
-        create_date,
+      <if test="createTime != null" >
+        create_time,
       </if>
       <if test="notes != null" >
         notes,
@@ -141,17 +175,14 @@
       <if test="orderId != null" >
         #{orderId,jdbcType=VARCHAR},
       </if>
-      <if test="orderDetailId != null" >
-        #{orderDetailId,jdbcType=INTEGER},
-      </if>
       <if test="memberId != null" >
         #{memberId,jdbcType=BIGINT},
       </if>
       <if test="amout != null" >
         #{amout,jdbcType=DECIMAL},
       </if>
-      <if test="createDate != null" >
-        #{createDate,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
       </if>
       <if test="notes != null" >
         #{notes,jdbcType=VARCHAR},
@@ -173,17 +204,14 @@
       <if test="record.orderId != null" >
         order_id = #{record.orderId,jdbcType=VARCHAR},
       </if>
-      <if test="record.orderDetailId != null" >
-        order_detail_id = #{record.orderDetailId,jdbcType=INTEGER},
-      </if>
       <if test="record.memberId != null" >
         member_id = #{record.memberId,jdbcType=BIGINT},
       </if>
       <if test="record.amout != null" >
         amout = #{record.amout,jdbcType=DECIMAL},
       </if>
-      <if test="record.createDate != null" >
-        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
       </if>
       <if test="record.notes != null" >
         notes = #{record.notes,jdbcType=VARCHAR},
@@ -197,10 +225,9 @@
     update order
     set id = #{record.id,jdbcType=BIGINT},
     order_id = #{record.orderId,jdbcType=VARCHAR},
-    order_detail_id = #{record.orderDetailId,jdbcType=INTEGER},
     member_id = #{record.memberId,jdbcType=BIGINT},
     amout = #{record.amout,jdbcType=DECIMAL},
-    create_date = #{record.createDate,jdbcType=TIMESTAMP},
+    create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
     notes = #{record.notes,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -212,17 +239,14 @@
       <if test="orderId != null" >
         order_id = #{orderId,jdbcType=VARCHAR},
       </if>
-      <if test="orderDetailId != null" >
-        order_detail_id = #{orderDetailId,jdbcType=INTEGER},
-      </if>
       <if test="memberId != null" >
         member_id = #{memberId,jdbcType=BIGINT},
       </if>
       <if test="amout != null" >
         amout = #{amout,jdbcType=DECIMAL},
       </if>
-      <if test="createDate != null" >
-        create_date = #{createDate,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
       </if>
       <if test="notes != null" >
         notes = #{notes,jdbcType=VARCHAR},
@@ -233,11 +257,10 @@
   <update id="updateByPrimaryKey" parameterType="com.example.milktea.pojo.OrderDO" >
     update order
     set order_id = #{orderId,jdbcType=VARCHAR},
-      order_detail_id = #{orderDetailId,jdbcType=INTEGER},
-      member_id = #{memberId,jdbcType=BIGINT},
-      amout = #{amout,jdbcType=DECIMAL},
-      create_date = #{createDate,jdbcType=TIMESTAMP},
-      notes = #{notes,jdbcType=VARCHAR}
+    member_id = #{memberId,jdbcType=BIGINT},
+    amout = #{amout,jdbcType=DECIMAL},
+    create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+    notes = #{notes,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

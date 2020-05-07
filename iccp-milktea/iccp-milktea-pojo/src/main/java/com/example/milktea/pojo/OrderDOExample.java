@@ -1,8 +1,8 @@
 package com.example.milktea.pojo;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class OrderDOExample {
@@ -66,19 +66,50 @@ public class OrderDOExample {
     }
 
     protected abstract static class GeneratedCriteria {
+        protected List<Criterion> createTimeCriteria;
+
+        protected List<Criterion> allCriteria;
+
         protected List<Criterion> criteria;
 
         protected GeneratedCriteria() {
             super();
             criteria = new ArrayList<Criterion>();
+            createTimeCriteria = new ArrayList<Criterion>();
+        }
+
+        public List<Criterion> getCreateTimeCriteria() {
+            return createTimeCriteria;
+        }
+
+        protected void addCreateTimeCriterion(String condition, Object value, String property) {
+            if (value == null) {
+                throw new RuntimeException("Value for " + property + " cannot be null");
+            }
+            createTimeCriteria.add(new Criterion(condition, value, "org.apache.ibatis.type.LocalDateTimeTypeHandler"));
+            allCriteria = null;
+        }
+
+        protected void addCreateTimeCriterion(String condition, LocalDateTime value1, LocalDateTime value2, String property) {
+            if (value1 == null || value2 == null) {
+                throw new RuntimeException("Between values for " + property + " cannot be null");
+            }
+            createTimeCriteria.add(new Criterion(condition, value1, value2, "org.apache.ibatis.type.LocalDateTimeTypeHandler"));
+            allCriteria = null;
         }
 
         public boolean isValid() {
-            return criteria.size() > 0;
+            return criteria.size() > 0
+                    || createTimeCriteria.size() > 0;
         }
 
         public List<Criterion> getAllCriteria() {
-            return criteria;
+            if (allCriteria == null) {
+                allCriteria = new ArrayList<Criterion>();
+                allCriteria.addAll(criteria);
+                allCriteria.addAll(createTimeCriteria);
+            }
+            return allCriteria;
         }
 
         public List<Criterion> getCriteria() {
@@ -90,6 +121,7 @@ public class OrderDOExample {
                 throw new RuntimeException("Value for condition cannot be null");
             }
             criteria.add(new Criterion(condition));
+            allCriteria = null;
         }
 
         protected void addCriterion(String condition, Object value, String property) {
@@ -97,6 +129,7 @@ public class OrderDOExample {
                 throw new RuntimeException("Value for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value));
+            allCriteria = null;
         }
 
         protected void addCriterion(String condition, Object value1, Object value2, String property) {
@@ -104,6 +137,7 @@ public class OrderDOExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
+            allCriteria = null;
         }
 
         public Criteria andIdIsNull() {
@@ -236,66 +270,6 @@ public class OrderDOExample {
             return (Criteria) this;
         }
 
-        public Criteria andOrderDetailIdIsNull() {
-            addCriterion("order_detail_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderDetailIdIsNotNull() {
-            addCriterion("order_detail_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderDetailIdEqualTo(Integer value) {
-            addCriterion("order_detail_id =", value, "orderDetailId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderDetailIdNotEqualTo(Integer value) {
-            addCriterion("order_detail_id <>", value, "orderDetailId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderDetailIdGreaterThan(Integer value) {
-            addCriterion("order_detail_id >", value, "orderDetailId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderDetailIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("order_detail_id >=", value, "orderDetailId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderDetailIdLessThan(Integer value) {
-            addCriterion("order_detail_id <", value, "orderDetailId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderDetailIdLessThanOrEqualTo(Integer value) {
-            addCriterion("order_detail_id <=", value, "orderDetailId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderDetailIdIn(List<Integer> values) {
-            addCriterion("order_detail_id in", values, "orderDetailId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderDetailIdNotIn(List<Integer> values) {
-            addCriterion("order_detail_id not in", values, "orderDetailId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderDetailIdBetween(Integer value1, Integer value2) {
-            addCriterion("order_detail_id between", value1, value2, "orderDetailId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderDetailIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("order_detail_id not between", value1, value2, "orderDetailId");
-            return (Criteria) this;
-        }
-
         public Criteria andMemberIdIsNull() {
             addCriterion("member_id is null");
             return (Criteria) this;
@@ -416,63 +390,63 @@ public class OrderDOExample {
             return (Criteria) this;
         }
 
-        public Criteria andCreateDateIsNull() {
-            addCriterion("create_date is null");
+        public Criteria andCreateTimeIsNull() {
+            addCriterion("create_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andCreateDateIsNotNull() {
-            addCriterion("create_date is not null");
+        public Criteria andCreateTimeIsNotNull() {
+            addCriterion("create_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCreateDateEqualTo(Date value) {
-            addCriterion("create_date =", value, "createDate");
+        public Criteria andCreateTimeEqualTo(LocalDateTime value) {
+            addCreateTimeCriterion("create_time =", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateDateNotEqualTo(Date value) {
-            addCriterion("create_date <>", value, "createDate");
+        public Criteria andCreateTimeNotEqualTo(LocalDateTime value) {
+            addCreateTimeCriterion("create_time <>", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateDateGreaterThan(Date value) {
-            addCriterion("create_date >", value, "createDate");
+        public Criteria andCreateTimeGreaterThan(LocalDateTime value) {
+            addCreateTimeCriterion("create_time >", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateDateGreaterThanOrEqualTo(Date value) {
-            addCriterion("create_date >=", value, "createDate");
+        public Criteria andCreateTimeGreaterThanOrEqualTo(LocalDateTime value) {
+            addCreateTimeCriterion("create_time >=", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateDateLessThan(Date value) {
-            addCriterion("create_date <", value, "createDate");
+        public Criteria andCreateTimeLessThan(LocalDateTime value) {
+            addCreateTimeCriterion("create_time <", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateDateLessThanOrEqualTo(Date value) {
-            addCriterion("create_date <=", value, "createDate");
+        public Criteria andCreateTimeLessThanOrEqualTo(LocalDateTime value) {
+            addCreateTimeCriterion("create_time <=", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateDateIn(List<Date> values) {
-            addCriterion("create_date in", values, "createDate");
+        public Criteria andCreateTimeIn(List<LocalDateTime> values) {
+            addCreateTimeCriterion("create_time in", values, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateDateNotIn(List<Date> values) {
-            addCriterion("create_date not in", values, "createDate");
+        public Criteria andCreateTimeNotIn(List<LocalDateTime> values) {
+            addCreateTimeCriterion("create_time not in", values, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateDateBetween(Date value1, Date value2) {
-            addCriterion("create_date between", value1, value2, "createDate");
+        public Criteria andCreateTimeBetween(LocalDateTime value1, LocalDateTime value2) {
+            addCreateTimeCriterion("create_time between", value1, value2, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateDateNotBetween(Date value1, Date value2) {
-            addCriterion("create_date not between", value1, value2, "createDate");
+        public Criteria andCreateTimeNotBetween(LocalDateTime value1, LocalDateTime value2) {
+            addCreateTimeCriterion("create_time not between", value1, value2, "createTime");
             return (Criteria) this;
         }
 

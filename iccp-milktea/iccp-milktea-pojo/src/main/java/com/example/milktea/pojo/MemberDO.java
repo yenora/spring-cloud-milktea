@@ -1,7 +1,9 @@
 package com.example.milktea.pojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,11 +21,8 @@ public class MemberDO {
     /** */
     private Long id;
 
-    /** 用户id*/
-    private Long baseUserId;
-
     /** 顾客姓名*/
-    @Length(max = 255, message = "顾客姓名最大长度为255")
+    @Length(max = 100, message = "顾客姓名最大长度为100")
     private String name;
 
     /** 登录密码*/
@@ -37,31 +36,32 @@ public class MemberDO {
     /** 年龄*/
     private Integer age;
 
-    /** 性别*/
-    @Length(max = 20, message = "性别最大长度为20")
-    private String sex;
+    /** 性别 0:男 1:女*/
+    private Boolean sex;
 
-    /** 顾客爱好*/
-    @Length(max = 255, message = "顾客爱好最大长度为255")
-    private String hobby;
+    /** 头像地址*/
+    @Length(max = 255, message = "头像地址最大长度为20")
+    private String avatar;
 
-    /** 来访次数*/
-    private Integer freq;
+    /** 登录次数*/
+    private Integer frequency;
 
     /** 创建时间*/
     @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class, as = LocalDateTime.class)
     private LocalDateTime createTime;
 
     /** 最近登录时间*/
     @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDateTime recentTime;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class, as = LocalDateTime.class)
+    private LocalDateTime recentLoginTime;
 
-    /** 头像*/
-    private byte[] headPic;
+    /** 描述*/
+    private String description;
 
     public Long getId() {
         return id;
@@ -71,20 +71,12 @@ public class MemberDO {
         this.id = id;
     }
 
-    public Long getBaseUserId() {
-        return baseUserId;
-    }
-
-    public void setBaseUserId(Long baseUserId) {
-        this.baseUserId = baseUserId;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
     public String getPassword() {
@@ -92,7 +84,7 @@ public class MemberDO {
     }
 
     public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+        this.password = password;
     }
 
     public String getEmail() {
@@ -100,7 +92,7 @@ public class MemberDO {
     }
 
     public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
+        this.email = email;
     }
 
     public Integer getAge() {
@@ -111,28 +103,28 @@ public class MemberDO {
         this.age = age;
     }
 
-    public String getSex() {
+    public Boolean getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex == null ? null : sex.trim();
+    public void setSex(Boolean sex) {
+        this.sex = sex;
     }
 
-    public String getHobby() {
-        return hobby;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setHobby(String hobby) {
-        this.hobby = hobby == null ? null : hobby.trim();
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
-    public Integer getFreq() {
-        return freq;
+    public Integer getFrequency() {
+        return frequency;
     }
 
-    public void setFreq(Integer freq) {
-        this.freq = freq;
+    public void setFrequency(Integer frequency) {
+        this.frequency = frequency;
     }
 
     public LocalDateTime getCreateTime() {
@@ -143,19 +135,19 @@ public class MemberDO {
         this.createTime = createTime;
     }
 
-    public LocalDateTime getRecentTime() {
-        return recentTime;
+    public LocalDateTime getRecentLoginTime() {
+        return recentLoginTime;
     }
 
-    public void setRecentTime(LocalDateTime recentTime) {
-        this.recentTime = recentTime;
+    public void setRecentLoginTime(LocalDateTime recentLoginTime) {
+        this.recentLoginTime = recentLoginTime;
     }
 
-    public byte[] getHeadPic() {
-        return headPic;
+    public String getDescription() {
+        return description;
     }
 
-    public void setHeadPic(byte[] headPic) {
-        this.headPic = headPic;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

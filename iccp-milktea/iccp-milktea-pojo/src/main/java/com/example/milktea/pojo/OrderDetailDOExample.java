@@ -294,52 +294,52 @@ public class OrderDetailDOExample {
             return (Criteria) this;
         }
 
-        public Criteria andQuantityEqualTo(Long value) {
+        public Criteria andQuantityEqualTo(Integer value) {
             addCriterion("quantity =", value, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityNotEqualTo(Long value) {
+        public Criteria andQuantityNotEqualTo(Integer value) {
             addCriterion("quantity <>", value, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityGreaterThan(Long value) {
+        public Criteria andQuantityGreaterThan(Integer value) {
             addCriterion("quantity >", value, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityGreaterThanOrEqualTo(Long value) {
+        public Criteria andQuantityGreaterThanOrEqualTo(Integer value) {
             addCriterion("quantity >=", value, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityLessThan(Long value) {
+        public Criteria andQuantityLessThan(Integer value) {
             addCriterion("quantity <", value, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityLessThanOrEqualTo(Long value) {
+        public Criteria andQuantityLessThanOrEqualTo(Integer value) {
             addCriterion("quantity <=", value, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityIn(List<Long> values) {
+        public Criteria andQuantityIn(List<Integer> values) {
             addCriterion("quantity in", values, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityNotIn(List<Long> values) {
+        public Criteria andQuantityNotIn(List<Integer> values) {
             addCriterion("quantity not in", values, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityBetween(Long value1, Long value2) {
+        public Criteria andQuantityBetween(Integer value1, Integer value2) {
             addCriterion("quantity between", value1, value2, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityNotBetween(Long value1, Long value2) {
+        public Criteria andQuantityNotBetween(Integer value1, Integer value2) {
             addCriterion("quantity not between", value1, value2, "quantity");
             return (Criteria) this;
         }

@@ -4,7 +4,9 @@ import com.example.common.annotation.VOAttribute;
 import com.example.milktea.dto.ProductStapleDTO;
 import com.example.milktea.dto.ProductTypeDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -45,11 +47,11 @@ public class ProductDO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class, as = LocalDateTime.class)
     private LocalDateTime createTime;
 
     /** 产品介绍*/
-    @Length(max = 1000, message = "产品介绍最大长度为255")
-    private String introduction;
+    private String description;
 
     @VOAttribute
     private ProductTypeDTO productTypeDTO;
@@ -78,7 +80,7 @@ public class ProductDO {
     }
 
     public void setStaples(String staples) {
-        this.staples = staples == null ? null : staples.trim();
+        this.staples = staples;
     }
 
     public String getName() {
@@ -86,7 +88,7 @@ public class ProductDO {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
     public BigDecimal getPrice() {
@@ -102,7 +104,7 @@ public class ProductDO {
     }
 
     public void setPic(String pic) {
-        this.pic = pic == null ? null : pic.trim();
+        this.pic = pic;
     }
 
     public Integer getRecommend() {
@@ -129,12 +131,12 @@ public class ProductDO {
         this.createTime = createTime;
     }
 
-    public String getIntroduction() {
-        return introduction;
+    public String getDescription() {
+        return description;
     }
 
-    public void setIntroduction(String introduction) {
-        this.introduction = introduction == null ? null : introduction.trim();
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public ProductTypeDTO getProductTypeDTO() {

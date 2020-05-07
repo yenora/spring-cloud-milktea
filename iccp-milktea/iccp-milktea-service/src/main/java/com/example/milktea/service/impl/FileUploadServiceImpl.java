@@ -1,10 +1,12 @@
 package com.example.milktea.service.impl;
 
+import static com.example.common.vo.JSONResultVO.CODE_ERROR;
+import static com.example.common.vo.JSONResultVO.CODE_SUCCESS;
+
 import com.example.common.util.FtpUtil;
 import com.example.common.util.IDUtils;
 import com.example.common.vo.JSONResultVO;
 import com.example.milktea.service.FileUploadService;
-import com.sun.org.apache.xpath.internal.objects.XBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.AopContext;
@@ -47,9 +49,8 @@ public class FileUploadServiceImpl implements FileUploadService {
     public JSONResultVO uploadFile(MultipartFile file, String username, String fileType) {
         if (file.isEmpty()) {
             return JSONResultVO.builder()
-                    .code(-1)
-                    .data("")
-                    .msg("上传文件为空").build();
+                    .code(CODE_ERROR)
+                    .message("上传文件为空").build();
         }
         String originalFilename = file.getOriginalFilename();
 
@@ -89,28 +90,25 @@ public class FileUploadServiceImpl implements FileUploadService {
 
                 if (flag) {
                     return JSONResultVO.builder()
-                            .code(1)
+                            .code(CODE_SUCCESS)
                             .data(nginxPath + basepath + filePath + originalFilename)
-                            .msg("上传成功").build();
+                            .message("上传成功").build();
                 } else {
                     LOGGER.error("文件上传错误");
                     return JSONResultVO.builder()
-                            .code(-2)
-                            .data("")
-                            .msg("上传失败").build();
+                            .code(CODE_ERROR)
+                            .message("上传失败").build();
                 }
             } catch (Exception e) {
                 LOGGER.error("文件上传异常");
                 return JSONResultVO.builder()
-                        .code(-2)
-                        .data("")
-                        .msg("上传失败").build();
+                        .code(CODE_ERROR)
+                        .message("上传失败").build();
             }
         } else {
             return JSONResultVO.builder()
-                    .code(-2)
-                    .data("")
-                    .msg("上传失败").build();
+                    .code(CODE_ERROR)
+                    .message("上传失败").build();
         }
     }
 
@@ -123,14 +121,13 @@ public class FileUploadServiceImpl implements FileUploadService {
         JSONResultVO uploadResult = ((FileUploadService) AopContext.currentProxy()).uploadFile(file, username, fileType);
         if (!"".equals(uploadResult.getData())) {
             return JSONResultVO.builder()
-                    .code(1)
+                    .code(CODE_SUCCESS)
                     .data(uploadResult.getData())
-                    .msg("修改文件成功").build();
+                    .message("修改文件成功").build();
         } else {
             return JSONResultVO.builder()
-                    .code(-2)
-                    .data("")
-                    .msg("修改文件失败").build();
+                    .code(CODE_ERROR)
+                    .message("修改文件失败").build();
         }
     }
 
@@ -141,15 +138,14 @@ public class FileUploadServiceImpl implements FileUploadService {
         if (FtpUtil.deleteFile(host, port, loginName, password, basepath, filePath,
                 fileName.substring(fileName.lastIndexOf("/") + 1))) {
             return JSONResultVO.builder()
-                    .code(1)
+                    .code(CODE_SUCCESS)
                     .data(fileName)
-                    .msg("删除文件成功").build();
+                    .message("删除文件成功").build();
         } else {
             LOGGER.error("删除文件失败");
             return JSONResultVO.builder()
-                    .code(-2)
-                    .data("")
-                    .msg("删除文件失败").build();
+                    .code(CODE_ERROR)
+                    .message("删除文件失败").build();
         }
     }
 
@@ -159,15 +155,14 @@ public class FileUploadServiceImpl implements FileUploadService {
         String remotePath = basepath + "/" + username + "/" + fileType + "/";
         if (FtpUtil.downloadFile(host, port, loginName, password, remotePath, fileName, localPath)) {
             return JSONResultVO.builder()
-                    .code(1)
+                    .code(CODE_SUCCESS)
                     .data(fileName)
-                    .msg("删除文件成功").build();
+                    .message("删除文件成功").build();
         } else {
             LOGGER.error("删除文件失败");
             return JSONResultVO.builder()
-                    .code(-2)
-                    .data("")
-                    .msg("删除文件失败").build();
+                    .code(CODE_ERROR)
+                    .message("删除文件失败").build();
         }
     }
 }

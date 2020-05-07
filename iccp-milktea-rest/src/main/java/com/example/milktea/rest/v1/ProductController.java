@@ -30,12 +30,12 @@ private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.c
 
 	@AutoLog(value="调用产品信息分页列表查询接口")
 	@PostMapping("/pageResult")
-	public ResponseEntity<PageResult<ProductDO>> pageResult(@RequestBody SearchDTO<ProductDO> query) throws Exception {
+	public ResponseEntity<JSONResultVO> pageResult(@RequestBody SearchDTO<ProductDO> query) throws Exception {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("调用产品信息分页列表查询接口");
 		}
-		PageResult<ProductDO> pageResult = PageResult.build(productService.pageList(query));
-		return ResponseEntity.ok(pageResult);
+		JSONResultVO result = productService.pageList(query);
+		return ResponseEntity.ok(result);
 	}
 
 	@AutoLog(value="调用产品信息添加接口")

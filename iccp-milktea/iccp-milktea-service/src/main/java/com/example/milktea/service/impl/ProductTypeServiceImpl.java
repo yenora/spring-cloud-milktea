@@ -1,9 +1,12 @@
 package com.example.milktea.service.impl;
 
+import static com.example.common.vo.JSONResultVO.CODE_ERROR;
+import static com.example.common.vo.JSONResultVO.CODE_SUCCESS;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import java.util.List;
 
+import com.example.common.util.PageResult;
 import com.example.common.vo.JSONResultVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +29,18 @@ public class ProductTypeServiceImpl implements ProductTypeService{
 
 	@Override
 	@Transactional(readOnly = true)
-	public PageInfo<ProductTypeDO> pageList(SearchDTO<ProductTypeDO> query) {
+	public JSONResultVO pageList(SearchDTO<ProductTypeDO> query) {
 		ProductTypeDOExample example = new ProductTypeDOExample();
 		Criteria criteria = example.createCriteria();
-		//TODO edit your query condition
-		PageHelper.startPage(query.getPage(), query.getLimit());
+		if (query.getEntity().getName() != null) {
+			criteria.andNameLike(LIKE + query.getEntity().getName() + LIKE);
+		}
+		PageHelper.startPage(query.getPage(), query.getLimit(), query.getSort());
 		List<ProductTypeDO> list = productTypeMapper.selectByExample(example);
-		PageInfo<ProductTypeDO> pageInfo = new PageInfo<>(list);
-		return pageInfo;
+		return JSONResultVO.builder()
+				.data(PageResult.build(new PageInfo<>(list)))
+				.code(CODE_SUCCESS)
+				.message("产品种类信息分页列表查询成功").build();
 	}
 
 	@Override
@@ -42,37 +49,37 @@ public class ProductTypeServiceImpl implements ProductTypeService{
 		checkNotNull(id, "param id is null");
 		return JSONResultVO.builder()
 				.data(productTypeMapper.selectByPrimaryKey(id))
-				.code(1)
-				.msg("产品种类信息详情查询成功").build();
+				.code(CODE_SUCCESS)
+				.message("产品种类信息详情查询成功").build();
 	}
 
 	@Override
 	@Transactional
 	public JSONResultVO add(ProductTypeDO record) {
+		productTypeMapper.insertSelective(record);
 		return JSONResultVO.builder()
-				.data(productTypeMapper.insertSelective(record))
-				.code(1)
-				.msg("产品种类信息添加成功").build();
+				.code(CODE_SUCCESS)
+				.message("产品种类信息添加成功").build();
 	}
 
 	@Override
 	@Transactional
 	public JSONResultVO delete(Long id) {
 		checkNotNull(id, "param id is null");
+		productTypeMapper.deleteByPrimaryKey(id);
 		return JSONResultVO.builder()
-				.data(productTypeMapper.deleteByPrimaryKey(id))
-				.code(1)
-				.msg("产品种类信息删除成功").build();
+				.code(CODE_SUCCESS)
+				.message("产品种类信息删除成功").build();
 	}
 
 	@Override
 	@Transactional
 	public JSONResultVO update(ProductTypeDO record) {
 		checkNotNull(record.getId(), "record's id is null");
+		productTypeMapper.updateByPrimaryKeySelective(record);
 		return JSONResultVO.builder()
-				.data(productTypeMapper.updateByPrimaryKeySelective(record))
-				.code(1)
-				.msg("产品种类信息修改成功").build();
+				.code(CODE_SUCCESS)
+				.message("产品种类信息修改成功").build();
 	}
 
 	@Override
@@ -89,8 +96,8 @@ public class ProductTypeServiceImpl implements ProductTypeService{
 		//TODO edit your query condition
 		return JSONResultVO.builder()
 				.data(productTypeMapper.selectByExample(example))
-				.code(1)
-				.msg("产品种类信息列表查询成功").build();
+				.code(CODE_SUCCESS)
+				.message("产品种类信息列表查询成功").build();
 	}
 
 	@Override
@@ -103,14 +110,13 @@ public class ProductTypeServiceImpl implements ProductTypeService{
 		checkState(result.size()<2, "multy result by query");
 		if(result.isEmpty()){
 			return JSONResultVO.builder()
-					.data(null)
-					.code(-1)
-					.msg("产品种类信息列表查询失败").build();
+					.code(CODE_ERROR)
+					.message("产品种类信息列表查询失败").build();
 		}
 		return JSONResultVO.builder()
 				.data(result.get(0))
-				.code(1)
-				.msg("产品种类信息列表查询成功").build();
+				.code(CODE_SUCCESS)
+				.message("产品种类信息列表查询成功").build();
 	}
 }
 

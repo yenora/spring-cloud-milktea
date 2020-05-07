@@ -7,11 +7,13 @@
     <result column="staples" property="staples" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="price" property="price" jdbcType="DECIMAL" />
-    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
     <result column="pic" property="pic" jdbcType="VARCHAR" />
     <result column="recommend" property="recommend" jdbcType="INTEGER" />
     <result column="sales" property="sales" jdbcType="BIGINT" />
     <result column="create_time" property="createTime" jdbcType="OTHER" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.example.milktea.pojo.ProductDO" extends="BaseResultMap" >
+    <result column="description" property="description" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -110,8 +112,27 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, type_id, staples, name, price, introduction, pic, recommend, sales, create_time
+    id, type_id, staples, name, price, pic, recommend, sales, create_time
   </sql>
+  <sql id="Blob_Column_List" >
+    description
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.example.milktea.pojo.ProductDOExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.milktea.pojo.ProductDOExample" >
     select
     <if test="distinct" >
@@ -126,9 +147,11 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
     select
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from product
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -144,15 +167,13 @@
   </delete>
   <insert id="insert" parameterType="com.example.milktea.pojo.ProductDO" >
     insert into product (id, type_id, staples,
-    name, price, introduction,
-    pic, recommend, sales,
-    create_time
-    )
+    name, price, pic, recommend,
+    sales, create_time,
+    description)
     values (#{id,jdbcType=BIGINT}, #{typeId,jdbcType=BIGINT}, #{staples,jdbcType=VARCHAR},
-    #{name,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{introduction,jdbcType=VARCHAR},
-    #{pic,jdbcType=VARCHAR}, #{recommend,jdbcType=INTEGER}, #{sales,jdbcType=BIGINT},
-    #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
-    )
+    #{name,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{pic,jdbcType=VARCHAR}, #{recommend,jdbcType=INTEGER},
+    #{sales,jdbcType=BIGINT}, #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+    #{description,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.milktea.pojo.ProductDO" >
     insert into product
@@ -172,9 +193,6 @@
       <if test="price != null" >
         price,
       </if>
-      <if test="introduction != null" >
-        introduction,
-      </if>
       <if test="pic != null" >
         pic,
       </if>
@@ -186,6 +204,9 @@
       </if>
       <if test="createTime != null" >
         create_time,
+      </if>
+      <if test="description != null" >
+        description,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -204,9 +225,6 @@
       <if test="price != null" >
         #{price,jdbcType=DECIMAL},
       </if>
-      <if test="introduction != null" >
-        #{introduction,jdbcType=VARCHAR},
-      </if>
       <if test="pic != null" >
         #{pic,jdbcType=VARCHAR},
       </if>
@@ -218,6 +236,9 @@
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -245,9 +266,6 @@
       <if test="record.price != null" >
         price = #{record.price,jdbcType=DECIMAL},
       </if>
-      <if test="record.introduction != null" >
-        introduction = #{record.introduction,jdbcType=VARCHAR},
-      </if>
       <if test="record.pic != null" >
         pic = #{record.pic,jdbcType=VARCHAR},
       </if>
@@ -260,7 +278,26 @@
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
       </if>
+      <if test="record.description != null" >
+        description = #{record.description,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update product
+    set id = #{record.id,jdbcType=BIGINT},
+    type_id = #{record.typeId,jdbcType=BIGINT},
+    staples = #{record.staples,jdbcType=VARCHAR},
+    name = #{record.name,jdbcType=VARCHAR},
+    price = #{record.price,jdbcType=DECIMAL},
+    pic = #{record.pic,jdbcType=VARCHAR},
+    recommend = #{record.recommend,jdbcType=INTEGER},
+    sales = #{record.sales,jdbcType=BIGINT},
+    create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+    description = #{record.description,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -272,7 +309,6 @@
     staples = #{record.staples,jdbcType=VARCHAR},
     name = #{record.name,jdbcType=VARCHAR},
     price = #{record.price,jdbcType=DECIMAL},
-    introduction = #{record.introduction,jdbcType=VARCHAR},
     pic = #{record.pic,jdbcType=VARCHAR},
     recommend = #{record.recommend,jdbcType=INTEGER},
     sales = #{record.sales,jdbcType=BIGINT},
@@ -296,9 +332,6 @@
       <if test="price != null" >
         price = #{price,jdbcType=DECIMAL},
       </if>
-      <if test="introduction != null" >
-        introduction = #{introduction,jdbcType=VARCHAR},
-      </if>
       <if test="pic != null" >
         pic = #{pic,jdbcType=VARCHAR},
       </if>
@@ -311,7 +344,23 @@
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
       </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.milktea.pojo.ProductDO" >
+    update product
+    set type_id = #{typeId,jdbcType=BIGINT},
+    staples = #{staples,jdbcType=VARCHAR},
+    name = #{name,jdbcType=VARCHAR},
+    price = #{price,jdbcType=DECIMAL},
+    pic = #{pic,jdbcType=VARCHAR},
+    recommend = #{recommend,jdbcType=INTEGER},
+    sales = #{sales,jdbcType=BIGINT},
+    create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+    description = #{description,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.milktea.pojo.ProductDO" >
@@ -320,7 +369,6 @@
     staples = #{staples,jdbcType=VARCHAR},
     name = #{name,jdbcType=VARCHAR},
     price = #{price,jdbcType=DECIMAL},
-    introduction = #{introduction,jdbcType=VARCHAR},
     pic = #{pic,jdbcType=VARCHAR},
     recommend = #{recommend,jdbcType=INTEGER},
     sales = #{sales,jdbcType=BIGINT},

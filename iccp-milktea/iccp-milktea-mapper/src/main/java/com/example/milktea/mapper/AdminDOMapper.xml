@@ -5,10 +5,10 @@
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="name" property="name" jdbcType="VARCHAR" />
         <result column="password" property="password" jdbcType="VARCHAR" />
-        <result column="tel" property="tel" jdbcType="VARCHAR" />
-        <result column="role" property="role" jdbcType="VARCHAR" />
-        <result column="create_time" property="createTime" jdbcType="OTHER" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
         <result column="avatar" property="avatar" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="OTHER" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler" />
     </resultMap>
     <sql id="Example_Where_Clause" >
         <where >
@@ -107,7 +107,7 @@
         </where>
     </sql>
     <sql id="Base_Column_List" >
-    id, name, password, tel, role, create_time, avatar
+    id, name, password, email, avatar, type, create_time
   </sql>
     <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.milktea.pojo.AdminDOExample" >
         select
@@ -141,11 +141,13 @@
     </delete>
     <insert id="insert" parameterType="com.example.milktea.pojo.AdminDO" >
         insert into admin (id, name, password,
-        tel, role, create_time,
-        avatar)
+        email, avatar, type,
+        create_time
+        )
         values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
-        #{tel,jdbcType=VARCHAR}, #{role,jdbcType=VARCHAR}, #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
-        #{avatar,jdbcType=VARCHAR})
+        #{email,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER},
+        #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+        )
     </insert>
     <insert id="insertSelective" parameterType="com.example.milktea.pojo.AdminDO" >
         insert into admin
@@ -159,17 +161,17 @@
             <if test="password != null" >
                 password,
             </if>
-            <if test="tel != null" >
-                tel,
-            </if>
-            <if test="role != null" >
-                role,
-            </if>
-            <if test="createTime != null" >
-                create_time,
+            <if test="email != null" >
+                email,
             </if>
             <if test="avatar != null" >
                 avatar,
+            </if>
+            <if test="type != null" >
+                type,
+            </if>
+            <if test="createTime != null" >
+                create_time,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -182,17 +184,17 @@
             <if test="password != null" >
                 #{password,jdbcType=VARCHAR},
             </if>
-            <if test="tel != null" >
-                #{tel,jdbcType=VARCHAR},
-            </if>
-            <if test="role != null" >
-                #{role,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null" >
-                #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+            <if test="email != null" >
+                #{email,jdbcType=VARCHAR},
             </if>
             <if test="avatar != null" >
                 #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
             </if>
         </trim>
     </insert>
@@ -214,17 +216,17 @@
             <if test="record.password != null" >
                 password = #{record.password,jdbcType=VARCHAR},
             </if>
-            <if test="record.tel != null" >
-                tel = #{record.tel,jdbcType=VARCHAR},
-            </if>
-            <if test="record.role != null" >
-                role = #{record.role,jdbcType=VARCHAR},
-            </if>
-            <if test="record.createTime != null" >
-                create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+            <if test="record.email != null" >
+                email = #{record.email,jdbcType=VARCHAR},
             </if>
             <if test="record.avatar != null" >
                 avatar = #{record.avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="record.type != null" >
+                type = #{record.type,jdbcType=INTEGER},
+            </if>
+            <if test="record.createTime != null" >
+                create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
             </if>
         </set>
         <if test="_parameter != null" >
@@ -236,10 +238,10 @@
         set id = #{record.id,jdbcType=BIGINT},
         name = #{record.name,jdbcType=VARCHAR},
         password = #{record.password,jdbcType=VARCHAR},
-        tel = #{record.tel,jdbcType=VARCHAR},
-        role = #{record.role,jdbcType=VARCHAR},
-        create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
-        avatar = #{record.avatar,jdbcType=VARCHAR}
+        email = #{record.email,jdbcType=VARCHAR},
+        avatar = #{record.avatar,jdbcType=VARCHAR},
+        type = #{record.type,jdbcType=INTEGER},
+        create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
         <if test="_parameter != null" >
             <include refid="Update_By_Example_Where_Clause" />
         </if>
@@ -253,17 +255,17 @@
             <if test="password != null" >
                 password = #{password,jdbcType=VARCHAR},
             </if>
-            <if test="tel != null" >
-                tel = #{tel,jdbcType=VARCHAR},
-            </if>
-            <if test="role != null" >
-                role = #{role,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null" >
-                create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+            <if test="email != null" >
+                email = #{email,jdbcType=VARCHAR},
             </if>
             <if test="avatar != null" >
                 avatar = #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
@@ -272,10 +274,10 @@
         update admin
         set name = #{name,jdbcType=VARCHAR},
         password = #{password,jdbcType=VARCHAR},
-        tel = #{tel,jdbcType=VARCHAR},
-        role = #{role,jdbcType=VARCHAR},
-        create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
-        avatar = #{avatar,jdbcType=VARCHAR}
+        email = #{email,jdbcType=VARCHAR},
+        avatar = #{avatar,jdbcType=VARCHAR},
+        type = #{type,jdbcType=INTEGER},
+        create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
         where id = #{id,jdbcType=BIGINT}
     </update>
     <select id="selectAdminNameList" resultType="java.lang.String">

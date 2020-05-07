@@ -1,7 +1,9 @@
 package com.example.milktea.pojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @NoArgsConstructor
@@ -24,10 +27,6 @@ public class OrderDO {
     @NotNull
     private String orderId;
 
-    /** 订单详情id*/
-    @NotNull
-    private Integer orderDetailId;
-
     /** 顾客id*/
     @NotNull
     private Long memberId;
@@ -39,7 +38,8 @@ public class OrderDO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private Date createDate;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class, as = LocalDateTime.class)
+    private LocalDateTime createTime;
 
     /** 备注*/
     @Length(max = 255, message = "备注最大长度为255")
@@ -58,15 +58,7 @@ public class OrderDO {
     }
 
     public void setOrderId(String orderId) {
-        this.orderId = orderId == null ? null : orderId.trim();
-    }
-
-    public Integer getOrderDetailId() {
-        return orderDetailId;
-    }
-
-    public void setOrderDetailId(Integer orderDetailId) {
-        this.orderDetailId = orderDetailId;
+        this.orderId = orderId;
     }
 
     public Long getMemberId() {
@@ -85,12 +77,12 @@ public class OrderDO {
         this.amout = amout;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public LocalDateTime getCreateTime() {
+        return createTime;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 
     public String getNotes() {
@@ -98,6 +90,6 @@ public class OrderDO {
     }
 
     public void setNotes(String notes) {
-        this.notes = notes == null ? null : notes.trim();
+        this.notes = notes;
     }
 }

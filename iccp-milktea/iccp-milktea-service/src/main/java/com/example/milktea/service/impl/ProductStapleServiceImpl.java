@@ -1,5 +1,7 @@
 package com.example.milktea.service.impl;
 
+import static com.example.common.vo.JSONResultVO.CODE_ERROR;
+import static com.example.common.vo.JSONResultVO.CODE_SUCCESS;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -7,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.common.util.PageResult;
 import com.example.common.vo.JSONResultVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +32,18 @@ public class ProductStapleServiceImpl implements ProductStapleService {
 
     @Override
     @Transactional(readOnly = true)
-    public PageInfo<ProductStapleDO> pageList(SearchDTO<ProductStapleDO> query) {
+    public JSONResultVO pageList(SearchDTO<ProductStapleDO> query) {
         ProductStapleDOExample example = new ProductStapleDOExample();
         Criteria criteria = example.createCriteria();
-        //TODO edit your query condition
-        PageHelper.startPage(query.getPage(), query.getLimit());
+        if (query.getEntity().getName() != null) {
+            criteria.andNameLike(LIKE + query.getEntity().getName() + LIKE);
+        }
+        PageHelper.startPage(query.getPage(), query.getLimit(), query.getSort());
         List<ProductStapleDO> list = productStapleMapper.selectByExample(example);
-        PageInfo<ProductStapleDO> pageInfo = new PageInfo<>(list);
-        return pageInfo;
+        return JSONResultVO.builder()
+                .data(PageResult.build(new PageInfo<>(list)))
+                .code(CODE_SUCCESS)
+                .message("产品原料信息分页列表查询成功").build();
     }
 
     @Override
@@ -45,37 +52,37 @@ public class ProductStapleServiceImpl implements ProductStapleService {
         checkNotNull(id, "param id is null");
         return JSONResultVO.builder()
                 .data(productStapleMapper.selectByPrimaryKey(id))
-                .code(1)
-                .msg("产品原料信息详情查询成功").build();
+                .code(CODE_SUCCESS)
+                .message("产品原料信息详情查询成功").build();
     }
 
     @Override
     @Transactional
     public JSONResultVO add(ProductStapleDO record) {
+        productStapleMapper.insertSelective(record);
         return JSONResultVO.builder()
-                .data(productStapleMapper.insertSelective(record))
-                .code(1)
-                .msg("产品原料信息添加成功").build();
+                .code(CODE_SUCCESS)
+                .message("产品原料信息添加成功").build();
     }
 
     @Override
     @Transactional
     public JSONResultVO delete(Long id) {
         checkNotNull(id, "param id is null");
+        productStapleMapper.deleteByPrimaryKey(id);
         return JSONResultVO.builder()
-                .data(productStapleMapper.deleteByPrimaryKey(id))
-                .code(1)
-                .msg("产品原料信息删除成功").build();
+                .code(CODE_SUCCESS)
+                .message("产品原料信息删除成功").build();
     }
 
     @Override
     @Transactional
     public JSONResultVO update(ProductStapleDO record) {
         checkNotNull(record.getId(), "record's id is null");
+        productStapleMapper.updateByPrimaryKeySelective(record);
         return JSONResultVO.builder()
-                .data(productStapleMapper.updateByPrimaryKeySelective(record))
-                .code(1)
-                .msg("产品原料信息修改成功").build();
+                .code(CODE_SUCCESS)
+                .message("产品原料信息修改成功").build();
     }
 
     @Override
@@ -92,8 +99,8 @@ public class ProductStapleServiceImpl implements ProductStapleService {
         //TODO edit your query condition
         return JSONResultVO.builder()
                 .data(productStapleMapper.selectByExample(example))
-                .code(1)
-                .msg("产品原料信息列表查询成功").build();
+                .code(CODE_SUCCESS)
+                .message("产品原料信息列表查询成功").build();
     }
 
     @Override
@@ -106,14 +113,13 @@ public class ProductStapleServiceImpl implements ProductStapleService {
         checkState(result.size() < 2, "multy result by query");
         if (result.isEmpty()) {
             return JSONResultVO.builder()
-                    .data(null)
-                    .code(-1)
-                    .msg("产品原料信息列表查询失败").build();
+                    .code(CODE_ERROR)
+                    .message("产品原料信息列表查询失败").build();
         }
         return JSONResultVO.builder()
                 .data(result.get(0))
-                .code(1)
-                .msg("产品原料信息列表查询成功").build();
+                .code(CODE_SUCCESS)
+                .message("产品原料信息列表查询成功").build();
     }
 }
 

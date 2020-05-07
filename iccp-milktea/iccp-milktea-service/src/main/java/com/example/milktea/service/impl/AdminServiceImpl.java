@@ -1,21 +1,23 @@
 package com.example.milktea.service.impl;
 
+import static com.example.common.vo.JSONResultVO.CODE_ERROR;
+import static com.example.common.vo.JSONResultVO.CODE_SUCCESS;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import com.example.common.util.GenericMap;
+import com.example.common.util.PageResult;
 import com.example.common.vo.JSONResultVO;
-import com.example.common.util.AESUtils;
 import com.example.common.util.JsonUtils;
-import org.springframework.aop.framework.AopContext;
+import com.example.milktea.vo.BackTokenVO;
+import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
@@ -26,40 +28,53 @@ import com.example.milktea.pojo.AdminDOExample;
 import com.example.milktea.pojo.AdminDOExample.Criteria;
 import com.example.milktea.service.AdminService;
 import com.example.common.dto.SearchDTO;
+import org.springframework.util.DigestUtils;
 
 @Service
 public class AdminServiceImpl implements AdminService {
 
+    private static final String DEFAULT_AVATAR = "http://127.0.0.1:5000/spring-cloud-milktea/default/avatar.gif";
+    private static final String DEFAULT_PASSWORD = "123456";
+
+    private static final String REDIS_USER_SESSION_KEY = "MILKTEA_TOKEN";
+    private static final String SPLIT = ":";
+    private static final String ERROR_TIP = "用户名或密码错误";
+    // 过期时间为七天
+    private static final Integer expiresIn = 1000 * 60 * 60 * 24 * 7;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+
     @Autowired
     private AdminDOMapper adminMapper;
 
-    @Value("${token.key:DKfBOcdEoRMxcPOi}")
-    private String key;
-    @Value("${token.iv:2019120120200630}")
-    private String iv;
-    @Value("${registry.avatar:http://127.0.0.1:5000/spring-cloud-milktea/default/avatar.gif}")
-    private String avatar;
-
     @Override
     @Transactional(readOnly = true)
-    public PageInfo<AdminDO> pageList(SearchDTO<AdminDO> query) {
+    public JSONResultVO pageList(SearchDTO<AdminDO> query) {
         AdminDOExample example = new AdminDOExample();
         Criteria criteria = example.createCriteria();
         //TODO edit your query condition
         PageHelper.startPage(query.getPage(), query.getLimit());
         List<AdminDO> list = adminMapper.selectByExample(example);
-        PageInfo<AdminDO> pageInfo = new PageInfo<>(list);
-        return pageInfo;
+        // 把密码清空
+        list.forEach(p -> p.setPassword(null));
+        return JSONResultVO.builder()
+                .data(PageResult.build(new PageInfo<>(list)))
+                .code(CODE_SUCCESS)
+                .message("管理员信息分页列表查询成功").build();
     }
 
     @Override
     @Transactional(readOnly = true)
     public JSONResultVO get(Long id) {
         checkNotNull(id, "param id is null");
+        AdminDO admin = adminMapper.selectByPrimaryKey(id);
+        // 把密码清空
+        admin.setPassword(null);
         return JSONResultVO.builder()
-                .data(adminMapper.selectByPrimaryKey(id))
-                .code(1)
-                .msg("管理员信息详情查询成功").build();
+                .data(admin)
+                .code(CODE_SUCCESS)
+                .message("管理员信息详情查询成功").build();
     }
 
     @Override
@@ -69,40 +84,43 @@ public class AdminServiceImpl implements AdminService {
             record.setCreateTime(LocalDateTime.now());
         }
         if (record.getAvatar() == null) {
-            record.setAvatar(avatar);
+            record.setAvatar(DEFAULT_AVATAR);
         }
+        if (record.getType() == null) {
+            // 默认为观察员
+            record.setType(2);
+        }
+
+        if (record.getPassword() == null) {
+            record.setPassword(DigestUtils.md5DigestAsHex(DEFAULT_PASSWORD.getBytes()));
+        } else {
+            record.setPassword(DigestUtils.md5DigestAsHex(record.getPassword().getBytes()));
+        }
+
+        adminMapper.insertSelective(record);
         return JSONResultVO.builder()
-                .data(adminMapper.insertSelective(record))
-                .code(1)
-                .msg("管理员信息添加成功").build();
+                .code(CODE_SUCCESS)
+                .message("管理员信息添加成功").build();
     }
 
     @Override
     @Transactional
     public JSONResultVO delete(Long id) {
         checkNotNull(id, "param id is null");
+        adminMapper.deleteByPrimaryKey(id);
         return JSONResultVO.builder()
-                .data(adminMapper.deleteByPrimaryKey(id))
-                .code(1)
-                .msg("管理员信息删除成功").build();
+                .code(CODE_SUCCESS)
+                .message("管理员信息删除成功").build();
     }
 
     @Override
     @Transactional
     public JSONResultVO update(AdminDO record) {
         checkNotNull(record.getId(), "record's id is null");
-        if (adminMapper.updateByPrimaryKeySelective(record) > 0) {
-            record.setToken(generateToken(record));
-            return JSONResultVO.builder()
-                    .data(record)
-                    .code(1)
-                    .msg("管理员信息修改成功").build();
-        } else {
-            return JSONResultVO.builder()
-                    .data(record)
-                    .code(-1)
-                    .msg("管理员信息修改失败").build();
-        }
+        adminMapper.updateByPrimaryKeySelective(record);
+        return JSONResultVO.builder()
+                .code(CODE_SUCCESS)
+                .message("管理员信息修改成功").build();
     }
 
     @Override
@@ -119,8 +137,8 @@ public class AdminServiceImpl implements AdminService {
         //TODO edit your query condition
         return JSONResultVO.builder()
                 .data(adminMapper.selectByExample(example))
-                .code(1)
-                .msg("管理员信息列表查询成功").build();
+                .code(CODE_SUCCESS)
+                .message("管理员信息列表查询成功").build();
     }
 
     @Override
@@ -131,98 +149,83 @@ public class AdminServiceImpl implements AdminService {
         if (query.getId() != null) {
             criteria.andIdEqualTo(query.getId());
         }
-        if (query.getTel() != null) {
-            criteria.andTelEqualTo(query.getTel());
-        }
         List<AdminDO> result = adminMapper.selectByExample(example);
         checkState(result.size() < 2, "multy result by query");
         if (result.isEmpty()) {
             JSONResultVO.builder()
-                    .data(null)
-                    .code(-1)
-                    .msg("管理员信息列表查询不到此记录").build();
+                    .code(CODE_ERROR)
+                    .message("管理员信息查询不到此记录").build();
         }
+        AdminDO admin = result.get(0);
+        admin.setPassword(null);
         return JSONResultVO.builder()
-                .data(result.get(0))
-                .code(1)
-                .msg("管理员信息列表查询成功").build();
-    }
-
-    @Override
-    public JSONResultVO getNameArray(String key) {
-        if (this.key.equals(key)) {
-            return JSONResultVO.builder()
-                    .data(adminMapper.selectAdminNameList().toArray())
-                    .code(1)
-                    .msg("获取管理员账号列表成功").build();
-        } else {
-            return JSONResultVO.builder()
-                    .data("")
-                    .code(-1)
-                    .msg("秘钥错误，获取管理员账号列表失败").build();
-        }
+                .data(admin)
+                .code(CODE_SUCCESS)
+                .message("管理员信息查询成功").build();
     }
 
     @Override
     @Transactional(readOnly = true)
     public JSONResultVO login(AdminDO record) {
-        checkNotNull(record.getName(), "param name is null");
-        checkNotNull(record.getPassword(), "param password is null");
-        List<AdminDO> result = adminMapper.login(record);
-        checkState(result.size() < 2, "multy result by query");
-        if (result.isEmpty()) {
-            return JSONResultVO.builder().data(null).code(-1).msg("没有此登录信息，检查后重试").build();
+        AdminDOExample example = new AdminDOExample();
+        Criteria criteria = example.createCriteria();
+        criteria.andNameEqualTo(record.getName());
+        List<AdminDO> list = adminMapper.selectByExample(example);
+        // 如果没有此用户名
+        if (null == list || list.size() == 0) {
+            return JSONResultVO.builder()
+                    .code(CODE_ERROR)
+                    .message(ERROR_TIP).build();
         }
+        AdminDO admin = list.get(0);
+        // 比对密码
+        if (!DigestUtils.md5DigestAsHex(record.getPassword().getBytes()).equals(admin.getPassword())) {
+            return JSONResultVO.builder()
+                    .code(CODE_ERROR)
+                    .message(ERROR_TIP).build();
+        }
+        // 生成token
+        String token = System.currentTimeMillis() + "" + RandomUtils.nextInt(10000, 99999);
 
-        AdminDO adminDO = result.get(0);
-        adminDO.setToken(generateToken(adminDO));
-
+        // 保存用户之前，把用户对象中的密码清空。
+        admin.setPassword(null);
+        // 把用户信息写入redis
+        redisTemplate.opsForValue().set(REDIS_USER_SESSION_KEY + SPLIT + token, JsonUtils.objectToJson(admin));
+        // 设置session的过期时间
+        redisTemplate.expire(REDIS_USER_SESSION_KEY + SPLIT + token, expiresIn, TimeUnit.MINUTES);
         return JSONResultVO.builder()
-                .code(1)
-                .data(adminDO)
-                .msg("登录成功").build();
+                .data(new BackTokenVO(token, expiresIn))
+                .code(CODE_SUCCESS)
+                .message("登录成功").build();
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public JSONResultVO logout(String token) {
+        //清除Redis记录
+        redisTemplate.delete(REDIS_USER_SESSION_KEY + SPLIT + token);
+        return JSONResultVO.builder()
+                .code(CODE_SUCCESS)
+                .message("注销成功").build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public JSONResultVO info(String token) {
-        checkNotNull(token, "token is null");
-        Map<String, String> data = JsonUtils.jsonToMap(AESUtils.decryptByCS7(token, key, iv));
-
-        if (data == null) {
-            return JSONResultVO.builder().data(null).code(-1).msg("令牌校验失败").build();
+        // 根据token从redis中查询用户信息
+        String json = redisTemplate.opsForValue().get(REDIS_USER_SESSION_KEY + SPLIT + token);
+        // 判断是否为空
+        if (StringUtils.isBlank(json)) {
+            return JSONResultVO.builder()
+                    .code(CODE_ERROR)
+                    .message("此session已经过期，请重新登录").build();
         }
-
-        long millis = Instant.now().plusMillis(TimeUnit.HOURS.toMillis(8)).getEpochSecond()
-                - Long.parseLong(data.get("stamp"));
-
-        // Token过期时间为一天
-        if (millis > 86400) {
-            return JSONResultVO.builder().data(null).code(50014).msg("令牌已过期，请重新登录").build();
-        }
-
-        return ((AdminService) AopContext.currentProxy()).getBy(
-                AdminDO.builder()
-                        .id(Long.parseLong(data.get("id").trim()))
-                        .tel(data.get("tel").trim()).build());
-    }
-
-    @Override
-    public void logout(String token) {
-        // 注销账户，暂时没想好怎么写，写搞个空接口
-    }
-
-    public String generateToken(AdminDO record) {
-        return AESUtils.encryptByCS7(
-                JsonUtils.objectToJson(
-                        new GenericMap.Builder<String, String>()
-                                .put("id", record.getId().toString())
-                                .put("tel", record.getTel())
-                                .put("stamp", Instant.now()
-                                        .plusMillis(TimeUnit.HOURS.toMillis(8))
-                                        .getEpochSecond() + "")
-                                .builder().map()),
-                key,
-                iv);
+        // 更新过期时间
+        redisTemplate.expire(REDIS_USER_SESSION_KEY + SPLIT + token, 30, TimeUnit.MINUTES);
+        return JSONResultVO.builder()
+                .data(JsonUtils.jsonToPojo(json, AdminDO.class))
+                .code(CODE_SUCCESS)
+                .message("获取人员信息成功").build();
     }
 }
 

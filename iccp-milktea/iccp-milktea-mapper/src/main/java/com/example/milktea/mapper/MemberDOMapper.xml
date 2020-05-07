@@ -3,19 +3,18 @@
 <mapper namespace="com.example.milktea.mapper.MemberDOMapper" >
   <resultMap id="BaseResultMap" type="com.example.milktea.pojo.MemberDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="base_user_id" property="baseUserId" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="age" property="age" jdbcType="INTEGER" />
-    <result column="sex" property="sex" jdbcType="VARCHAR" />
-    <result column="hobby" property="hobby" jdbcType="VARCHAR" />
-    <result column="freq" property="freq" jdbcType="INTEGER" />
+    <result column="sex" property="sex" jdbcType="BIT" />
+    <result column="avatar" property="avatar" jdbcType="VARCHAR" />
+    <result column="frequency" property="frequency" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="OTHER" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler" />
-    <result column="recent_time" property="recentTime" jdbcType="OTHER" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler" />
+    <result column="recent_login_time" property="recentLoginTime" jdbcType="OTHER" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.example.milktea.pojo.MemberDO" extends="BaseResultMap" >
-    <result column="head_pic" property="headPic" jdbcType="LONGVARBINARY" />
+    <result column="description" property="description" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -60,7 +59,7 @@
                 </when>
               </choose>
             </foreach>
-            <foreach collection="criteria.recentTimeCriteria" item="criterion" >
+            <foreach collection="criteria.recentLoginTimeCriteria" item="criterion" >
               <choose >
                 <when test="criterion.noValue" >
                   and ${criterion.condition}
@@ -127,7 +126,7 @@
                 </when>
               </choose>
             </foreach>
-            <foreach collection="criteria.recentTimeCriteria" item="criterion" >
+            <foreach collection="criteria.recentLoginTimeCriteria" item="criterion" >
               <choose >
                 <when test="criterion.noValue" >
                   and ${criterion.condition}
@@ -152,10 +151,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, base_user_id, name, password, email, age, sex, hobby, freq, create_time, recent_time
+    id, name, password, email, age, sex, avatar, frequency, create_time, recent_login_time
   </sql>
   <sql id="Blob_Column_List" >
-    head_pic
+    description
   </sql>
   <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.example.milktea.pojo.MemberDOExample" >
     select
@@ -188,7 +187,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
-    select 
+    select
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
@@ -206,25 +205,22 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.example.milktea.pojo.MemberDO" >
-    insert into member (id, base_user_id, name, 
-      password, email, age, 
-      sex, hobby, freq, create_time, 
-      recent_time, 
-      head_pic)
-    values (#{id,jdbcType=BIGINT}, #{baseUserId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
-      #{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
-      #{sex,jdbcType=VARCHAR}, #{hobby,jdbcType=VARCHAR}, #{freq,jdbcType=INTEGER}, #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}, 
-      #{recentTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}, 
-      #{headPic,jdbcType=LONGVARBINARY})
+    insert into member (id, name, password,
+    email, age, sex, avatar,
+    frequency, create_time,
+    recent_login_time,
+    description)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+    #{email,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{sex,jdbcType=BIT}, #{avatar,jdbcType=VARCHAR},
+    #{frequency,jdbcType=INTEGER}, #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+    #{recentLoginTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+    #{description,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.milktea.pojo.MemberDO" >
     insert into member
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
-      </if>
-      <if test="baseUserId != null" >
-        base_user_id,
       </if>
       <if test="name != null" >
         name,
@@ -241,28 +237,25 @@
       <if test="sex != null" >
         sex,
       </if>
-      <if test="hobby != null" >
-        hobby,
+      <if test="avatar != null" >
+        avatar,
       </if>
-      <if test="freq != null" >
-        freq,
+      <if test="frequency != null" >
+        frequency,
       </if>
       <if test="createTime != null" >
         create_time,
       </if>
-      <if test="recentTime != null" >
-        recent_time,
+      <if test="recentLoginTime != null" >
+        recent_login_time,
       </if>
-      <if test="headPic != null" >
-        head_pic,
+      <if test="description != null" >
+        description,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=BIGINT},
-      </if>
-      <if test="baseUserId != null" >
-        #{baseUserId,jdbcType=BIGINT},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
@@ -277,22 +270,22 @@
         #{age,jdbcType=INTEGER},
       </if>
       <if test="sex != null" >
-        #{sex,jdbcType=VARCHAR},
+        #{sex,jdbcType=BIT},
       </if>
-      <if test="hobby != null" >
-        #{hobby,jdbcType=VARCHAR},
+      <if test="avatar != null" >
+        #{avatar,jdbcType=VARCHAR},
       </if>
-      <if test="freq != null" >
-        #{freq,jdbcType=INTEGER},
+      <if test="frequency != null" >
+        #{frequency,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
       </if>
-      <if test="recentTime != null" >
-        #{recentTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      <if test="recentLoginTime != null" >
+        #{recentLoginTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
       </if>
-      <if test="headPic != null" >
-        #{headPic,jdbcType=LONGVARBINARY},
+      <if test="description != null" >
+        #{description,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -308,9 +301,6 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.baseUserId != null" >
-        base_user_id = #{record.baseUserId,jdbcType=BIGINT},
-      </if>
       <if test="record.name != null" >
         name = #{record.name,jdbcType=VARCHAR},
       </if>
@@ -324,22 +314,22 @@
         age = #{record.age,jdbcType=INTEGER},
       </if>
       <if test="record.sex != null" >
-        sex = #{record.sex,jdbcType=VARCHAR},
+        sex = #{record.sex,jdbcType=BIT},
       </if>
-      <if test="record.hobby != null" >
-        hobby = #{record.hobby,jdbcType=VARCHAR},
+      <if test="record.avatar != null" >
+        avatar = #{record.avatar,jdbcType=VARCHAR},
       </if>
-      <if test="record.freq != null" >
-        freq = #{record.freq,jdbcType=INTEGER},
+      <if test="record.frequency != null" >
+        frequency = #{record.frequency,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
       </if>
-      <if test="record.recentTime != null" >
-        recent_time = #{record.recentTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      <if test="record.recentLoginTime != null" >
+        recent_login_time = #{record.recentLoginTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
       </if>
-      <if test="record.headPic != null" >
-        head_pic = #{record.headPic,jdbcType=LONGVARBINARY},
+      <if test="record.description != null" >
+        description = #{record.description,jdbcType=LONGVARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -349,17 +339,16 @@
   <update id="updateByExampleWithBLOBs" parameterType="map" >
     update member
     set id = #{record.id,jdbcType=BIGINT},
-      base_user_id = #{record.baseUserId,jdbcType=BIGINT},
-      name = #{record.name,jdbcType=VARCHAR},
-      password = #{record.password,jdbcType=VARCHAR},
-      email = #{record.email,jdbcType=VARCHAR},
-      age = #{record.age,jdbcType=INTEGER},
-      sex = #{record.sex,jdbcType=VARCHAR},
-      hobby = #{record.hobby,jdbcType=VARCHAR},
-      freq = #{record.freq,jdbcType=INTEGER},
-      create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
-      recent_time = #{record.recentTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
-      head_pic = #{record.headPic,jdbcType=LONGVARBINARY}
+    name = #{record.name,jdbcType=VARCHAR},
+    password = #{record.password,jdbcType=VARCHAR},
+    email = #{record.email,jdbcType=VARCHAR},
+    age = #{record.age,jdbcType=INTEGER},
+    sex = #{record.sex,jdbcType=BIT},
+    avatar = #{record.avatar,jdbcType=VARCHAR},
+    frequency = #{record.frequency,jdbcType=INTEGER},
+    create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+    recent_login_time = #{record.recentLoginTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+    description = #{record.description,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -367,16 +356,15 @@
   <update id="updateByExample" parameterType="map" >
     update member
     set id = #{record.id,jdbcType=BIGINT},
-      base_user_id = #{record.baseUserId,jdbcType=BIGINT},
-      name = #{record.name,jdbcType=VARCHAR},
-      password = #{record.password,jdbcType=VARCHAR},
-      email = #{record.email,jdbcType=VARCHAR},
-      age = #{record.age,jdbcType=INTEGER},
-      sex = #{record.sex,jdbcType=VARCHAR},
-      hobby = #{record.hobby,jdbcType=VARCHAR},
-      freq = #{record.freq,jdbcType=INTEGER},
-      create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
-      recent_time = #{record.recentTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+    name = #{record.name,jdbcType=VARCHAR},
+    password = #{record.password,jdbcType=VARCHAR},
+    email = #{record.email,jdbcType=VARCHAR},
+    age = #{record.age,jdbcType=INTEGER},
+    sex = #{record.sex,jdbcType=BIT},
+    avatar = #{record.avatar,jdbcType=VARCHAR},
+    frequency = #{record.frequency,jdbcType=INTEGER},
+    create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+    recent_login_time = #{record.recentLoginTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -384,9 +372,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.example.milktea.pojo.MemberDO" >
     update member
     <set >
-      <if test="baseUserId != null" >
-        base_user_id = #{baseUserId,jdbcType=BIGINT},
-      </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
@@ -400,53 +385,51 @@
         age = #{age,jdbcType=INTEGER},
       </if>
       <if test="sex != null" >
-        sex = #{sex,jdbcType=VARCHAR},
+        sex = #{sex,jdbcType=BIT},
       </if>
-      <if test="hobby != null" >
-        hobby = #{hobby,jdbcType=VARCHAR},
+      <if test="avatar != null" >
+        avatar = #{avatar,jdbcType=VARCHAR},
       </if>
-      <if test="freq != null" >
-        freq = #{freq,jdbcType=INTEGER},
+      <if test="frequency != null" >
+        frequency = #{frequency,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
       </if>
-      <if test="recentTime != null" >
-        recent_time = #{recentTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      <if test="recentLoginTime != null" >
+        recent_login_time = #{recentLoginTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
       </if>
-      <if test="headPic != null" >
-        head_pic = #{headPic,jdbcType=LONGVARBINARY},
+      <if test="description != null" >
+        description = #{description,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.milktea.pojo.MemberDO" >
     update member
-    set base_user_id = #{baseUserId,jdbcType=BIGINT},
-      name = #{name,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      email = #{email,jdbcType=VARCHAR},
-      age = #{age,jdbcType=INTEGER},
-      sex = #{sex,jdbcType=VARCHAR},
-      hobby = #{hobby,jdbcType=VARCHAR},
-      freq = #{freq,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
-      recent_time = #{recentTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
-      head_pic = #{headPic,jdbcType=LONGVARBINARY}
+    set name = #{name,jdbcType=VARCHAR},
+    password = #{password,jdbcType=VARCHAR},
+    email = #{email,jdbcType=VARCHAR},
+    age = #{age,jdbcType=INTEGER},
+    sex = #{sex,jdbcType=BIT},
+    avatar = #{avatar,jdbcType=VARCHAR},
+    frequency = #{frequency,jdbcType=INTEGER},
+    create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+    recent_login_time = #{recentLoginTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+    description = #{description,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.milktea.pojo.MemberDO" >
     update member
-    set base_user_id = #{baseUserId,jdbcType=BIGINT},
-      name = #{name,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      email = #{email,jdbcType=VARCHAR},
-      age = #{age,jdbcType=INTEGER},
-      sex = #{sex,jdbcType=VARCHAR},
-      hobby = #{hobby,jdbcType=VARCHAR},
-      freq = #{freq,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
-      recent_time = #{recentTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+    set name = #{name,jdbcType=VARCHAR},
+    password = #{password,jdbcType=VARCHAR},
+    email = #{email,jdbcType=VARCHAR},
+    age = #{age,jdbcType=INTEGER},
+    sex = #{sex,jdbcType=BIT},
+    avatar = #{avatar,jdbcType=VARCHAR},
+    frequency = #{frequency,jdbcType=INTEGER},
+    create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+    recent_login_time = #{recentLoginTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
