@@ -6,17 +6,18 @@ import static com.example.common.vo.JSONResultVO.CODE_ERROR;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.example.common.util.PageResult;
+import com.example.common.util.StringUtils;
 import com.example.common.vo.JSONResultVO;
-import com.example.milktea.dto.ProductStapleDTO;
-import com.example.milktea.dto.ProductTypeDTO;
 import com.example.milktea.mapper.ProductStapleDOMapper;
 import com.example.milktea.mapper.ProductTypeDOMapper;
 import com.example.milktea.pojo.*;
-import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,8 @@ import com.example.common.dto.SearchDTO;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    private static final String SPLIT = ",";
 
     @Autowired
     private ProductDOMapper productMapper;
@@ -43,8 +46,6 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true)
     public JSONResultVO pageList(SearchDTO<ProductDO> query) {
         ProductDOExample proExample = new ProductDOExample();
-        ProductStapleDOExample stapleExample = new ProductStapleDOExample();
-        ProductTypeDOExample typeExample = new ProductTypeDOExample();
         Criteria criteria = proExample.createCriteria();
         if (query.getEntity().getName() != null) {
             criteria.andNameLike(LIKE + query.getEntity().getName() + LIKE);
@@ -56,32 +57,9 @@ public class ProductServiceImpl implements ProductService {
             criteria.andRecommendEqualTo(query.getEntity().getRecommend());
         }
         PageHelper.startPage(query.getPage(), query.getLimit(), query.getSort());
-        List<ProductDO> prolist = productMapper.selectByExample(proExample);
-        List<ProductStapleDO> staplelist = productStapleDOMapper.selectByExample(stapleExample);
-        List<ProductTypeDO> typelist = productTypeDOMapper.selectByExample(typeExample);
-
-        for (ProductDO productDO : prolist) {
-            for (ProductTypeDO typeDO : typelist) {
-                if (productDO.getTypeId().equals(typeDO.getId())) {
-                    productDO.setProductTypeDTO(new ProductTypeDTO(typeDO.getId(), typeDO.getName()));
-                }
-            }
-
-            List<Long> ids = new ArrayList<>();
-            List<String> names = new ArrayList<>();
-            for (ProductStapleDO stapleDO : staplelist) {
-                Long[] staples = (Long[]) ConvertUtils.convert(productDO.getStaples().split(","), Long.class);
-                for (Long staple : staples) {
-                    if (staple.equals(stapleDO.getId())) {
-                        ids.add(stapleDO.getId());
-                        names.add(stapleDO.getName());
-                    }
-                }
-            }
-            productDO.setProductStapleDTO(new ProductStapleDTO(ids.toArray(new Long[ids.size()]), names.toArray(new String[names.size()])));
-        }
+        List<ProductDO> prolist = productMapper.selectByExampleWithBLOBs(proExample);
         return JSONResultVO.builder()
-                .data(PageResult.build(new PageInfo<>(prolist)))
+                .data(PageResult.build(new PageInfo<>(this.genProductVOList(prolist))))
                 .code(CODE_SUCCESS)
                 .message("产品信息分页列表查询成功").build();
     }
@@ -99,6 +77,19 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public JSONResultVO add(ProductDO record) {
+        if (record.getPrice() == null) {
+            record.setPrice(new BigDecimal(0));
+        }
+        if (record.getRecommend() == null) {
+            record.setRecommend(1);
+        }
+        record.setCreateTime(LocalDateTime.now());
+        record.setSales(0L);
+        StringBuilder stapleBuilder = new StringBuilder();
+        for (String str : StringUtils.longToString(record.getStapleId())) {
+            stapleBuilder.append(str).append(SPLIT);
+        }
+        record.setStapleIds(stapleBuilder.deleteCharAt(stapleBuilder.length() - 1).toString());
         productMapper.insertSelective(record);
         return JSONResultVO.builder()
                 .code(CODE_SUCCESS)
@@ -138,7 +129,7 @@ public class ProductServiceImpl implements ProductService {
         Criteria criteria = example.createCriteria();
         //TODO edit your query condition
         return JSONResultVO.builder()
-                .data(productMapper.selectByExample(example))
+                .data(productMapper.selectByExampleWithBLOBs(example))
                 .code(CODE_SUCCESS)
                 .message("产品信息列表查询成功").build();
     }
@@ -149,7 +140,7 @@ public class ProductServiceImpl implements ProductService {
         ProductDOExample example = new ProductDOExample();
         Criteria criteria = example.createCriteria();
         //TODO edit your query condition
-        List<ProductDO> result = productMapper.selectByExample(example);
+        List<ProductDO> result = productMapper.selectByExampleWithBLOBs(example);
         checkState(result.size() < 2, "multy result by query");
         if (result.isEmpty()) {
             return JSONResultVO.builder()
@@ -160,6 +151,39 @@ public class ProductServiceImpl implements ProductService {
                 .data(result.get(0))
                 .code(CODE_SUCCESS)
                 .message("产品信息列表查询成功").build();
+    }
+
+    @Override
+    @Transactional
+    public JSONResultVO listBySize(Integer size) {
+        List<ProductDO> prolist = productMapper.selectBySizeWithBLOBs(size);
+        return JSONResultVO.builder()
+                .data(this.genProductVOList(prolist))
+                .code(CODE_SUCCESS)
+                .message("产品信息列表查询成功").build();
+    }
+
+    private List<ProductDO> genProductVOList(List<ProductDO> prolist) {
+        List<ProductStapleDO> staplelist = productStapleDOMapper.selectByExample(new ProductStapleDOExample());
+        List<ProductTypeDO> typelist = productTypeDOMapper.selectByExample(new ProductTypeDOExample());
+
+        Map<Long, String> type = typelist.stream().collect(Collectors.toMap(ProductTypeDO::getId, ProductTypeDO::getName));
+        Map<Long, String> staple = staplelist.stream().collect(Collectors.toMap(ProductStapleDO::getId, ProductStapleDO::getName));
+
+        StringBuilder stapleBuilder = new StringBuilder();
+
+        prolist.forEach(product -> {
+            product.setType(type.get(product.getTypeId()));
+            if (null != product.getStapleIds() && !"".equals(product.getStapleIds().trim())) {
+                String[] staples = product.getStapleIds().split(SPLIT);
+                for (String id : staples) {
+                    stapleBuilder.append(staple.get(Long.parseLong(id))).append(SPLIT);
+                }
+                product.setStaple(stapleBuilder.deleteCharAt(stapleBuilder.length() - 1).toString());
+                product.setStapleId(StringUtils.StringArray2LongArray(staples));
+            }
+        });
+        return prolist;
     }
 }
 

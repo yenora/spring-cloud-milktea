@@ -33,4 +33,6 @@ public interface ProductDOMapper {
     int updateByPrimaryKeyWithBLOBs(ProductDO record);
 
     int updateByPrimaryKey(ProductDO record);
+
+    List<ProductDO> selectBySizeWithBLOBs(@Param("size") Integer size);
 }

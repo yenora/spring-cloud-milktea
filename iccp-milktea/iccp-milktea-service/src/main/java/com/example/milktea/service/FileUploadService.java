@@ -20,7 +20,7 @@ public interface FileUploadService{
      * @param file 二进制文件
      * @param username 用户名称
      * @param fileType 文件类型（文件夹）
-     * @param fileName 文件名称
+     * @param fileName 原文件名称
      * @return JSONResultVO
      */
     JSONResultVO updateFile(MultipartFile file, String username, String fileType, String fileName);

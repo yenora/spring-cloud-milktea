@@ -8,17 +8,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import com.example.common.log.AutoLog;
 import com.example.common.util.PageResult;
 import com.example.milktea.pojo.ProductDO;
 import com.example.milktea.service.ProductService;
 import com.example.common.dto.SearchDTO;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/v1/product")
@@ -68,6 +65,36 @@ private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.c
 		JSONResultVO result = productService.update(product);
 		return ResponseEntity.ok(result);
 
+	}
+
+	@AutoLog(value="调用产品信息列表查询接口")
+	@PostMapping("/query/list")
+	public ResponseEntity<JSONResultVO> queryList(@RequestBody @Valid ProductDO query) throws Exception {
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("调用产品信息列表查询接口");
+		}
+		JSONResultVO result = productService.listBy(query);
+		return ResponseEntity.ok(result);
+	}
+
+	@AutoLog(value="调用产品信息列表查询接口")
+	@PostMapping("/query/object")
+	public ResponseEntity<JSONResultVO> queryObject(@RequestBody @Valid ProductDO query) throws Exception {
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("调用产品信息列表查询接口");
+		}
+		JSONResultVO result = productService.getBy(query);
+		return ResponseEntity.ok(result);
+	}
+
+	@AutoLog(value="调用产品信息列表查询接口")
+	@PostMapping("/query/list/size")
+	public ResponseEntity<JSONResultVO> queryListBySize(Integer size) throws Exception {
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("调用产品信息列表查询接口");
+		}
+		JSONResultVO result = productService.listBySize(size);
+		return ResponseEntity.ok(result);
 	}
 }
 

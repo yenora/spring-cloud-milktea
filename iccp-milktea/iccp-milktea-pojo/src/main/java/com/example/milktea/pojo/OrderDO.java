@@ -24,11 +24,9 @@ public class OrderDO {
     private Long id;
 
     /** 订单唯一id*/
-    @NotNull
     private String orderId;
 
     /** 顾客id*/
-    @NotNull
     private Long memberId;
 
     /** 订单总额*/

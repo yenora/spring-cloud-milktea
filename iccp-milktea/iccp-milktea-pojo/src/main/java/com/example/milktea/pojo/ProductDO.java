@@ -8,6 +8,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -15,17 +18,19 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProductDO {
     /** 产品ID*/
     private Long id;
 
     /** 产品种类ID*/
-    @NotNull
     private Long typeId;
 
     /** 产品原料*/
     @Length(max = 255, message = "产品原料最大长度为255")
-    private String staples;
+    private String stapleIds;
 
     /** 产品名称*/
     @Length(max = 255, message = "产品原料最大长度为255")
@@ -53,11 +58,17 @@ public class ProductDO {
     /** 产品介绍*/
     private String description;
 
+   /** 接收前台传来的原料id数组*/
     @VOAttribute
-    private ProductTypeDTO productTypeDTO;
+    private Long[] stapleId;
 
+    /** 前台展示用*/
     @VOAttribute
-    private ProductStapleDTO productStapleDTO;
+    private String type;
+
+    /** 前台展示用*/
+    @VOAttribute
+    private String staple;
 
     public Long getId() {
         return id;
@@ -75,12 +86,12 @@ public class ProductDO {
         this.typeId = typeId;
     }
 
-    public String getStaples() {
-        return staples;
+    public String getStapleIds() {
+        return stapleIds;
     }
 
-    public void setStaples(String staples) {
-        this.staples = staples;
+    public void setStapleIds(String stapleIds) {
+        this.stapleIds = stapleIds;
     }
 
     public String getName() {
@@ -136,22 +147,30 @@ public class ProductDO {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = description == null ? null : description.trim();
     }
 
-    public ProductTypeDTO getProductTypeDTO() {
-        return productTypeDTO;
+    public Long[] getStapleId() {
+        return stapleId;
     }
 
-    public void setProductTypeDTO(ProductTypeDTO productTypeDTO) {
-        this.productTypeDTO = productTypeDTO;
+    public void setStapleId(Long[] stapleId) {
+        this.stapleId = stapleId;
     }
 
-    public ProductStapleDTO getProductStapleDTO() {
-        return productStapleDTO;
+    public String getType() {
+        return type;
     }
 
-    public void setProductStapleDTO(ProductStapleDTO productStapleDTO) {
-        this.productStapleDTO = productStapleDTO;
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getStaple() {
+        return staple;
+    }
+
+    public void setStaple(String staple) {
+        this.staple = staple;
     }
 }

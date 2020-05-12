@@ -32,7 +32,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Value("${ftp.username:milktea}")
     private String loginName;
 
-    @Value("${ftp.password:123456}")
+    @Value("${ftp.password:mMnDzq9}")
     private String password;
 
     @Value("${ftp.basepath:/spring-cloud-milktea}")
@@ -55,7 +55,7 @@ public class FileUploadServiceImpl implements FileUploadService {
         String originalFilename = file.getOriginalFilename();
 
         if (!"".equals(originalFilename)) {
-            String uuid = IDUtils.genImageName();
+            Long randomId = IDUtils.genRandomId();
 
             if (originalFilename.contains("\\")) {
                 int index = originalFilename.lastIndexOf("\\");
@@ -64,11 +64,11 @@ public class FileUploadServiceImpl implements FileUploadService {
 
             if (originalFilename.contains(".")) {
                 String[] fileNameSplitArray = originalFilename.split("\\.");
-                originalFilename = uuid + "." + fileNameSplitArray[1];
+                originalFilename = randomId + "." + fileNameSplitArray[1];
             }
 
             if (!originalFilename.contains(".")) {
-                originalFilename = uuid;
+                originalFilename = randomId + "";
             }
 
             // 临时文件
@@ -84,7 +84,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                 /*
                     上传文件到FTP服务器
                  */
-                String filePath = "/" + username + "/" + fileType + "/";
+                String filePath = "/" + fileType + "/" + username + "/";
                 FileInputStream in = new FileInputStream(dest);
                 boolean flag = FtpUtil.uploadFile(host, port, loginName, password, basepath, filePath, originalFilename, in);
 
@@ -134,35 +134,34 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Override
     @Transactional
     public JSONResultVO deleteFile(String fileName, String username, String fileType) {
-        String filePath = "/" + username + "/" + fileType + "/";
+        String filePath = "/" + fileType + "/" + username + "/";
         if (FtpUtil.deleteFile(host, port, loginName, password, basepath, filePath,
                 fileName.substring(fileName.lastIndexOf("/") + 1))) {
             return JSONResultVO.builder()
                     .code(CODE_SUCCESS)
-                    .data(fileName)
                     .message("删除文件成功").build();
         } else {
-            LOGGER.error("删除文件失败");
+            LOGGER.error("删除文件失败，文件服务器不存在此文件");
             return JSONResultVO.builder()
                     .code(CODE_ERROR)
-                    .message("删除文件失败").build();
+                    .message("删除文件失败，文件服务器不存在此文件").build();
         }
     }
 
     @Override
     @Transactional
     public JSONResultVO downloadFile(String fileName, String username, String fileType, String localPath) {
-        String remotePath = basepath + "/" + username + "/" + fileType + "/";
+        String remotePath = basepath + "/" + fileType + "/" + username + "/";
         if (FtpUtil.downloadFile(host, port, loginName, password, remotePath, fileName, localPath)) {
             return JSONResultVO.builder()
                     .code(CODE_SUCCESS)
                     .data(fileName)
-                    .message("删除文件成功").build();
+                    .message("下载文件成功").build();
         } else {
-            LOGGER.error("删除文件失败");
+            LOGGER.error("下载文件失败");
             return JSONResultVO.builder()
                     .code(CODE_ERROR)
-                    .message("删除文件失败").build();
+                    .message("下载文件失败").build();
         }
     }
 }

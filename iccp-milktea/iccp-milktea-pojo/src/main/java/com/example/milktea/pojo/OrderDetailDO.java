@@ -14,11 +14,9 @@ public class OrderDetailDO {
     private Long id;
 
     /** 订单ID*/
-    @NotNull
     private Long orderId;
 
     /** 产品ID*/
-    @NotNull
     private Long productId;
 
     /** 数量*/

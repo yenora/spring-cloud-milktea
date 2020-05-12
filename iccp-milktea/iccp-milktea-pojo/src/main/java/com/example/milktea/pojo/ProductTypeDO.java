@@ -1,7 +1,13 @@
 package com.example.milktea.pojo;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProductTypeDO {
     /** 产品种类ID*/
     private Long id;

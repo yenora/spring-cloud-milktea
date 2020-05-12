@@ -182,7 +182,7 @@ public class FtpUtil {
     public static void main(String[] args) {
         try {
             FileInputStream in = new FileInputStream(new File("C:\\Users\\Mr.yao\\Desktop\\1.jpg"));
-            boolean flag = uploadFile("127.0.0.1", 21, "milktea", "123456", "/", "/upload/", "2.jpg", in);
+            boolean flag = uploadFile("127.0.0.1", 21, "mMnDzq9", "123456", "/", "/upload/", "2.jpg", in);
 //            boolean flag = downloadFile("127.0.0.1", 21, "milktea", "123456", "upload", "1.jpg", "F:\\");
             System.out.println(flag);
         } catch (FileNotFoundException var3) {

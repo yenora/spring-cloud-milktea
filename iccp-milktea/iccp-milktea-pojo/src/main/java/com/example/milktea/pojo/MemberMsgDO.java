@@ -22,11 +22,9 @@ public class MemberMsgDO {
     private Long id;
 
     /** 顾客ID*/
-    @NotNull
     private Long memberId;
 
     /** 产品ID*/
-    @NotNull
     private Long productId;
 
     /**

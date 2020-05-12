@@ -260,73 +260,73 @@ public class ProductDOExample {
             return (Criteria) this;
         }
 
-        public Criteria andStaplesIsNull() {
-            addCriterion("staples is null");
+        public Criteria andStapleIdsIsNull() {
+            addCriterion("staple_ids is null");
             return (Criteria) this;
         }
 
-        public Criteria andStaplesIsNotNull() {
-            addCriterion("staples is not null");
+        public Criteria andStapleIdsIsNotNull() {
+            addCriterion("staple_ids is not null");
             return (Criteria) this;
         }
 
-        public Criteria andStaplesEqualTo(String value) {
-            addCriterion("staples =", value, "staples");
+        public Criteria andStapleIdsEqualTo(String value) {
+            addCriterion("staple_ids =", value, "stapleIds");
             return (Criteria) this;
         }
 
-        public Criteria andStaplesNotEqualTo(String value) {
-            addCriterion("staples <>", value, "staples");
+        public Criteria andStapleIdsNotEqualTo(String value) {
+            addCriterion("staple_ids <>", value, "stapleIds");
             return (Criteria) this;
         }
 
-        public Criteria andStaplesGreaterThan(String value) {
-            addCriterion("staples >", value, "staples");
+        public Criteria andStapleIdsGreaterThan(String value) {
+            addCriterion("staple_ids >", value, "stapleIds");
             return (Criteria) this;
         }
 
-        public Criteria andStaplesGreaterThanOrEqualTo(String value) {
-            addCriterion("staples >=", value, "staples");
+        public Criteria andStapleIdsGreaterThanOrEqualTo(String value) {
+            addCriterion("staple_ids >=", value, "stapleIds");
             return (Criteria) this;
         }
 
-        public Criteria andStaplesLessThan(String value) {
-            addCriterion("staples <", value, "staples");
+        public Criteria andStapleIdsLessThan(String value) {
+            addCriterion("staple_ids <", value, "stapleIds");
             return (Criteria) this;
         }
 
-        public Criteria andStaplesLessThanOrEqualTo(String value) {
-            addCriterion("staples <=", value, "staples");
+        public Criteria andStapleIdsLessThanOrEqualTo(String value) {
+            addCriterion("staple_ids <=", value, "stapleIds");
             return (Criteria) this;
         }
 
-        public Criteria andStaplesLike(String value) {
-            addCriterion("staples like", value, "staples");
+        public Criteria andStapleIdsLike(String value) {
+            addCriterion("staple_ids like", value, "stapleIds");
             return (Criteria) this;
         }
 
-        public Criteria andStaplesNotLike(String value) {
-            addCriterion("staples not like", value, "staples");
+        public Criteria andStapleIdsNotLike(String value) {
+            addCriterion("staple_ids not like", value, "stapleIds");
             return (Criteria) this;
         }
 
-        public Criteria andStaplesIn(List<String> values) {
-            addCriterion("staples in", values, "staples");
+        public Criteria andStapleIdsIn(List<String> values) {
+            addCriterion("staple_ids in", values, "stapleIds");
             return (Criteria) this;
         }
 
-        public Criteria andStaplesNotIn(List<String> values) {
-            addCriterion("staples not in", values, "staples");
+        public Criteria andStapleIdsNotIn(List<String> values) {
+            addCriterion("staple_ids not in", values, "stapleIds");
             return (Criteria) this;
         }
 
-        public Criteria andStaplesBetween(String value1, String value2) {
-            addCriterion("staples between", value1, value2, "staples");
+        public Criteria andStapleIdsBetween(String value1, String value2) {
+            addCriterion("staple_ids between", value1, value2, "stapleIds");
             return (Criteria) this;
         }
 
-        public Criteria andStaplesNotBetween(String value1, String value2) {
-            addCriterion("staples not between", value1, value2, "staples");
+        public Criteria andStapleIdsNotBetween(String value1, String value2) {
+            addCriterion("staple_ids not between", value1, value2, "stapleIds");
             return (Criteria) this;
         }
 
@@ -530,66 +530,6 @@ public class ProductDOExample {
             return (Criteria) this;
         }
 
-        public Criteria andRecommendIsNull() {
-            addCriterion("recommend is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRecommendIsNotNull() {
-            addCriterion("recommend is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRecommendEqualTo(Integer value) {
-            addCriterion("recommend =", value, "recommend");
-            return (Criteria) this;
-        }
-
-        public Criteria andRecommendNotEqualTo(Integer value) {
-            addCriterion("recommend <>", value, "recommend");
-            return (Criteria) this;
-        }
-
-        public Criteria andRecommendGreaterThan(Integer value) {
-            addCriterion("recommend >", value, "recommend");
-            return (Criteria) this;
-        }
-
-        public Criteria andRecommendGreaterThanOrEqualTo(Integer value) {
-            addCriterion("recommend >=", value, "recommend");
-            return (Criteria) this;
-        }
-
-        public Criteria andRecommendLessThan(Integer value) {
-            addCriterion("recommend <", value, "recommend");
-            return (Criteria) this;
-        }
-
-        public Criteria andRecommendLessThanOrEqualTo(Integer value) {
-            addCriterion("recommend <=", value, "recommend");
-            return (Criteria) this;
-        }
-
-        public Criteria andRecommendIn(List<Integer> values) {
-            addCriterion("recommend in", values, "recommend");
-            return (Criteria) this;
-        }
-
-        public Criteria andRecommendNotIn(List<Integer> values) {
-            addCriterion("recommend not in", values, "recommend");
-            return (Criteria) this;
-        }
-
-        public Criteria andRecommendBetween(Integer value1, Integer value2) {
-            addCriterion("recommend between", value1, value2, "recommend");
-            return (Criteria) this;
-        }
-
-        public Criteria andRecommendNotBetween(Integer value1, Integer value2) {
-            addCriterion("recommend not between", value1, value2, "recommend");
-            return (Criteria) this;
-        }
-
         public Criteria andSalesIsNull() {
             addCriterion("sales is null");
             return (Criteria) this;
@@ -647,6 +587,66 @@ public class ProductDOExample {
 
         public Criteria andSalesNotBetween(Long value1, Long value2) {
             addCriterion("sales not between", value1, value2, "sales");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecommendIsNull() {
+            addCriterion("recommend is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecommendIsNotNull() {
+            addCriterion("recommend is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecommendEqualTo(Integer value) {
+            addCriterion("recommend =", value, "recommend");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecommendNotEqualTo(Integer value) {
+            addCriterion("recommend <>", value, "recommend");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecommendGreaterThan(Integer value) {
+            addCriterion("recommend >", value, "recommend");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecommendGreaterThanOrEqualTo(Integer value) {
+            addCriterion("recommend >=", value, "recommend");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecommendLessThan(Integer value) {
+            addCriterion("recommend <", value, "recommend");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecommendLessThanOrEqualTo(Integer value) {
+            addCriterion("recommend <=", value, "recommend");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecommendIn(List<Integer> values) {
+            addCriterion("recommend in", values, "recommend");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecommendNotIn(List<Integer> values) {
+            addCriterion("recommend not in", values, "recommend");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecommendBetween(Integer value1, Integer value2) {
+            addCriterion("recommend between", value1, value2, "recommend");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecommendNotBetween(Integer value1, Integer value2) {
+            addCriterion("recommend not between", value1, value2, "recommend");
             return (Criteria) this;
         }
 

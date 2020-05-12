@@ -1,9 +1,15 @@
 package com.example.milktea.pojo;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProductStapleDO {
     /** 产品原料ID*/
     private Long id;
