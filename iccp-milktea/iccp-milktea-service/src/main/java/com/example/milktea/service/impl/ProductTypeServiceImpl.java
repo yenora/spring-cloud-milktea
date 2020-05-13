@@ -35,7 +35,7 @@ public class ProductTypeServiceImpl implements ProductTypeService{
 			criteria.andNameLike(LIKE + query.getEntity().getName() + LIKE);
 		}
 		PageHelper.startPage(query.getPage(), query.getLimit(), query.getSort());
-		List<ProductTypeDO> list = productTypeMapper.selectByExample(example);
+		List<ProductTypeDO> list = productTypeMapper.selectByExampleWithBLOBs(example);
 		return JSONResultVO.builder()
 				.data(PageResult.build(new PageInfo<>(list)))
 				.code(CODE_SUCCESS)
@@ -94,7 +94,7 @@ public class ProductTypeServiceImpl implements ProductTypeService{
 		Criteria criteria = example.createCriteria();
 		//TODO edit your query condition
 		return JSONResultVO.builder()
-				.data(productTypeMapper.selectByExample(example))
+				.data(productTypeMapper.selectByExampleWithBLOBs(example))
 				.code(CODE_SUCCESS)
 				.message("产品种类信息列表查询成功").build();
 	}
@@ -105,7 +105,7 @@ public class ProductTypeServiceImpl implements ProductTypeService{
 		ProductTypeDOExample example = new ProductTypeDOExample();
 		Criteria criteria = example.createCriteria();
 		//TODO edit your query condition
-		List<ProductTypeDO> result = productTypeMapper.selectByExample(example);
+		List<ProductTypeDO> result = productTypeMapper.selectByExampleWithBLOBs(example);
 		checkState(result.size()<2, "multy result by query");
 		if(result.isEmpty()){
 			return JSONResultVO.builder()

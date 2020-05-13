@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.example.common.util.PageResult;
 import com.example.common.vo.JSONResultVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +33,7 @@ public class ProductStapleServiceImpl implements ProductStapleService {
     public JSONResultVO pageList(SearchDTO<ProductStapleDO> query) {
         ProductStapleDOExample example = new ProductStapleDOExample();
         Criteria criteria = example.createCriteria();
-        if (query.getEntity().getName() != null) {
+        if (StringUtils.isNotBlank(query.getEntity().getName())) {
             criteria.andNameLike(LIKE + query.getEntity().getName() + LIKE);
         }
         PageHelper.startPage(query.getPage(), query.getLimit(), query.getSort());
