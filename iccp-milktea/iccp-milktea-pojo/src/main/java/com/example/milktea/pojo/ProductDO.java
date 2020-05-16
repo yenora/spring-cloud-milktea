@@ -1,8 +1,6 @@
 package com.example.milktea.pojo;
 
 import com.example.common.annotation.VOAttribute;
-import com.example.milktea.dto.ProductStapleDTO;
-import com.example.milktea.dto.ProductTypeDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -14,7 +12,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 

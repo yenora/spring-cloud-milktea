@@ -107,20 +107,62 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public JSONResultVO delete(Long id) {
         checkNotNull(id, "param id is null");
-        adminMapper.deleteByPrimaryKey(id);
-        return JSONResultVO.builder()
-                .code(CODE_SUCCESS)
-                .message("管理员信息删除成功").build();
+        int result = adminMapper.deleteByPrimaryKey(id);
+        if (result > 0) {
+            return JSONResultVO.builder()
+                    .code(CODE_SUCCESS)
+                    .message("管理员信息删除成功").build();
+        } else {
+            return JSONResultVO.builder()
+                    .code(CODE_ERROR)
+                    .message("管理员信息删除失败").build();
+        }
     }
 
     @Override
     @Transactional
     public JSONResultVO update(AdminDO record) {
         checkNotNull(record.getId(), "record's id is null");
-        adminMapper.updateByPrimaryKeySelective(record);
-        return JSONResultVO.builder()
-                .code(CODE_SUCCESS)
-                .message("管理员信息修改成功").build();
+        if (StringUtils.isBlank(record.getToken())) {
+            return JSONResultVO.builder()
+                    .code(CODE_ERROR)
+                    .message("token is empty").build();
+        }
+        // 根据token从redis中查询用户信息
+        String json = redisTemplate.opsForValue().get(REDIS_USER_SESSION_KEY + SPLIT + record.getToken());
+        // 判断是否为空
+        if (StringUtils.isBlank(json)) {
+            return JSONResultVO.builder()
+                    .code(CODE_ERROR)
+                    .message("此session已经过期，请重新登录").build();
+        }
+
+        if (StringUtils.isNotBlank(record.getPassword())) {
+            // 密码加密
+            record.setPassword(DigestUtils.md5DigestAsHex(record.getPassword().getBytes()));
+        }
+
+        int result = adminMapper.updateByPrimaryKeySelective(record);
+
+        if (result > 0) {
+            // 重新生成token
+            String token = System.currentTimeMillis() + "" + RandomUtils.nextInt(10000, 99999);
+            // 保存用户之前，把用户对象中的密码清空。
+            record.setPassword(null);
+            // 把用户信息写入redis
+            redisTemplate.opsForValue().set(REDIS_USER_SESSION_KEY + SPLIT + token, JsonUtils.objectToJson(record));
+            // 设置session的过期时间
+            redisTemplate.expire(REDIS_USER_SESSION_KEY + SPLIT + token, expiresIn, TimeUnit.MINUTES);
+            return JSONResultVO.builder()
+                    .code(CODE_SUCCESS)
+                    .data(token)
+                    .message("管理员信息修改成功").build();
+        } else {
+            return JSONResultVO.builder()
+                    .code(CODE_ERROR)
+                    .data(record.getToken())
+                    .message("管理员信息修改失败").build();
+        }
     }
 
     @Override
@@ -202,7 +244,12 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional(readOnly = true)
     public JSONResultVO logout(String token) {
-        //清除Redis记录
+        if (StringUtils.isBlank(token)) {
+            return JSONResultVO.builder()
+                    .code(CODE_ERROR)
+                    .message("token is empty").build();
+        }
+        // 清除Redis记录
         redisTemplate.delete(REDIS_USER_SESSION_KEY + SPLIT + token);
         return JSONResultVO.builder()
                 .code(CODE_SUCCESS)
@@ -212,9 +259,13 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional(readOnly = true)
     public JSONResultVO info(String token) {
+        if (StringUtils.isBlank(token)) {
+            return JSONResultVO.builder()
+                    .code(CODE_ERROR)
+                    .message("token is empty").build();
+        }
         // 根据token从redis中查询用户信息
         String json = redisTemplate.opsForValue().get(REDIS_USER_SESSION_KEY + SPLIT + token);
-        // 判断是否为空
         if (StringUtils.isBlank(json)) {
             return JSONResultVO.builder()
                     .code(CODE_ERROR)
