@@ -16,6 +16,7 @@ import com.example.common.util.JsonUtils;
 import com.example.milktea.vo.BackTokenVO;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -107,6 +108,12 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public JSONResultVO delete(Long id) {
         checkNotNull(id, "param id is null");
+        AdminDO record = (AdminDO) ((AdminService) AopContext.currentProxy()).get(id).getData();
+        if (record.getType().equals(0)) {
+            return JSONResultVO.builder()
+                    .code(CODE_ERROR)
+                    .message("系统管理员不可以删除自己哦！").build();
+        }
         int result = adminMapper.deleteByPrimaryKey(id);
         if (result > 0) {
             return JSONResultVO.builder()
