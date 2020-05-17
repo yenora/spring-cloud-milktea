@@ -9,7 +9,7 @@ import java.util.List;
  * @Date: 2020-5-10 11:52
  * @Version：V1.0
  **/
-public class StringUtils {
+public class TypeChangeUtils {
 
     public static String[] longToString(Long[] longArray) {
         if (longArray == null || longArray.length < 1) {

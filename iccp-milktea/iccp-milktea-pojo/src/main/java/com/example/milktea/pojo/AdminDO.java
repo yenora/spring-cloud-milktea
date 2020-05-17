@@ -27,7 +27,7 @@ public class AdminDO {
     private String name;
 
     /** 管理员密码*/
-    @Length(max = 255, message = "管理员密码最大长度为255")
+    @Length(max = 32, message = "管理员密码最大长度为32")
     private String password;
 
     /** 邮箱*/

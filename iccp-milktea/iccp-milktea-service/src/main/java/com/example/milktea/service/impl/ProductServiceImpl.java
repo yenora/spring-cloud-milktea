@@ -13,11 +13,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.example.common.util.PageResult;
-import com.example.common.util.StringUtils;
+import com.example.common.util.TypeChangeUtils;
 import com.example.common.vo.JSONResultVO;
 import com.example.milktea.mapper.ProductStapleDOMapper;
 import com.example.milktea.mapper.ProductTypeDOMapper;
 import com.example.milktea.pojo.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
     public JSONResultVO pageList(SearchDTO<ProductDO> query) {
         ProductDOExample proExample = new ProductDOExample();
         Criteria criteria = proExample.createCriteria();
-        if (query.getEntity().getName() != null) {
+        if (StringUtils.isNotBlank(query.getEntity().getName())) {
             criteria.andNameLike(LIKE + query.getEntity().getName() + LIKE);
         }
         if (query.getEntity().getTypeId() != null) {
@@ -86,7 +87,7 @@ public class ProductServiceImpl implements ProductService {
         record.setCreateTime(LocalDateTime.now());
         record.setSales(0L);
         StringBuilder stapleBuilder = new StringBuilder();
-        for (String str : StringUtils.longToString(record.getStapleId())) {
+        for (String str : TypeChangeUtils.longToString(record.getStapleId())) {
             stapleBuilder.append(str).append(SPLIT);
         }
         record.setStapleIds(stapleBuilder.deleteCharAt(stapleBuilder.length() - 1).toString());
@@ -174,13 +175,13 @@ public class ProductServiceImpl implements ProductService {
 
         prolist.forEach(product -> {
             product.setType(type.get(product.getTypeId()));
-            if (null != product.getStapleIds() && !"".equals(product.getStapleIds().trim())) {
+            if (StringUtils.isNotBlank(product.getStapleIds())) {
                 String[] staples = product.getStapleIds().split(SPLIT);
                 for (String id : staples) {
                     stapleBuilder.append(staple.get(Long.parseLong(id))).append(SPLIT);
                 }
                 product.setStaple(stapleBuilder.deleteCharAt(stapleBuilder.length() - 1).toString());
-                product.setStapleId(StringUtils.StringArray2LongArray(staples));
+                product.setStapleId(TypeChangeUtils.StringArray2LongArray(staples));
             }
         });
         return prolist;

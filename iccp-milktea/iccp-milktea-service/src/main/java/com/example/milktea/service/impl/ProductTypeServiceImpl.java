@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.example.common.util.PageResult;
 import com.example.common.vo.JSONResultVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +32,7 @@ public class ProductTypeServiceImpl implements ProductTypeService{
 	public JSONResultVO pageList(SearchDTO<ProductTypeDO> query) {
 		ProductTypeDOExample example = new ProductTypeDOExample();
 		Criteria criteria = example.createCriteria();
-		if (query.getEntity().getName() != null) {
+		if (StringUtils.isNotBlank(query.getEntity().getName())) {
 			criteria.andNameLike(LIKE + query.getEntity().getName() + LIKE);
 		}
 		PageHelper.startPage(query.getPage(), query.getLimit(), query.getSort());

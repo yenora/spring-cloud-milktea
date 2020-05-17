@@ -7,6 +7,7 @@ import com.example.common.util.FtpUtil;
 import com.example.common.util.IDUtils;
 import com.example.common.vo.JSONResultVO;
 import com.example.milktea.service.FileUploadService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.AopContext;
@@ -54,7 +55,7 @@ public class FileUploadServiceImpl implements FileUploadService {
         }
         String originalFilename = file.getOriginalFilename();
 
-        if (!"".equals(originalFilename)) {
+        if (StringUtils.isNotBlank(originalFilename)) {
             Long randomId = IDUtils.genRandomId();
 
             if (originalFilename.contains("\\")) {

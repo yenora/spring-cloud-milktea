@@ -1,5 +1,6 @@
 package com.example.milktea.pojo;
 
+import com.example.common.annotation.VOAttribute;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -25,8 +26,12 @@ public class MemberDO {
     @Length(max = 100, message = "顾客姓名最大长度为100")
     private String name;
 
+    /** 顾客昵称*/
+    @Length(max = 255, message = "顾客昵称最大长度为255")
+    private String nickname;
+
     /** 登录密码*/
-    @Length(max = 255, message = "登录密码最大长度为255")
+    @Length(max = 32, message = "登录密码最大长度为32")
     private String password;
 
     /** 邮箱*/
@@ -63,6 +68,14 @@ public class MemberDO {
     /** 描述*/
     private String description;
 
+    /** 查询创建时间的开始时间 */
+    @VOAttribute
+    private LocalDateTime queryCreateTimeBegin;
+
+    /** 查询创建时间的结束时间 */
+    @VOAttribute
+    private LocalDateTime queryCreateTimeEnd;
+
     public Long getId() {
         return id;
     }
@@ -77,6 +90,14 @@ public class MemberDO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getPassword() {
@@ -149,5 +170,21 @@ public class MemberDO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public LocalDateTime getQueryCreateTimeBegin() {
+        return queryCreateTimeBegin;
+    }
+
+    public void setQueryCreateTimeBegin(LocalDateTime queryCreateTimeBegin) {
+        this.queryCreateTimeBegin = queryCreateTimeBegin;
+    }
+
+    public LocalDateTime getQueryCreateTimeEnd() {
+        return queryCreateTimeEnd;
+    }
+
+    public void setQueryCreateTimeEnd(LocalDateTime queryCreateTimeEnd) {
+        this.queryCreateTimeEnd = queryCreateTimeEnd;
     }
 }
