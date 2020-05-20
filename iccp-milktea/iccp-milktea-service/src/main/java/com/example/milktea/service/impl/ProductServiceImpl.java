@@ -60,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
         PageHelper.startPage(query.getPage(), query.getLimit(), query.getSort());
         List<ProductDO> prolist = productMapper.selectByExampleWithBLOBs(proExample);
         return JSONResultVO.builder()
-                .data(PageResult.build(new PageInfo<>(this.genProductVOList(prolist))))
+                .data(PageResult.build(new PageInfo<>(genProductVOList(prolist))))
                 .code(CODE_SUCCESS)
                 .message("产品信息分页列表查询成功").build();
     }
@@ -159,7 +159,7 @@ public class ProductServiceImpl implements ProductService {
     public JSONResultVO listBySize(Integer size) {
         List<ProductDO> prolist = productMapper.selectBySizeWithBLOBs(size);
         return JSONResultVO.builder()
-                .data(this.genProductVOList(prolist))
+                .data(genProductVOList(prolist))
                 .code(CODE_SUCCESS)
                 .message("产品信息列表查询成功").build();
     }

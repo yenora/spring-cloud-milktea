@@ -5,14 +5,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderDOExample {
+public class OrdersDOExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public OrderDOExample() {
+    public OrdersDOExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -330,123 +330,63 @@ public class OrderDOExample {
             return (Criteria) this;
         }
 
-        public Criteria andAmoutIsNull() {
-            addCriterion("amout is null");
+        public Criteria andAmountIsNull() {
+            addCriterion("amount is null");
             return (Criteria) this;
         }
 
-        public Criteria andAmoutIsNotNull() {
-            addCriterion("amout is not null");
+        public Criteria andAmountIsNotNull() {
+            addCriterion("amount is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAmoutEqualTo(BigDecimal value) {
-            addCriterion("amout =", value, "amout");
+        public Criteria andAmountEqualTo(BigDecimal value) {
+            addCriterion("amount =", value, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andAmoutNotEqualTo(BigDecimal value) {
-            addCriterion("amout <>", value, "amout");
+        public Criteria andAmountNotEqualTo(BigDecimal value) {
+            addCriterion("amount <>", value, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andAmoutGreaterThan(BigDecimal value) {
-            addCriterion("amout >", value, "amout");
+        public Criteria andAmountGreaterThan(BigDecimal value) {
+            addCriterion("amount >", value, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andAmoutGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("amout >=", value, "amout");
+        public Criteria andAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("amount >=", value, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andAmoutLessThan(BigDecimal value) {
-            addCriterion("amout <", value, "amout");
+        public Criteria andAmountLessThan(BigDecimal value) {
+            addCriterion("amount <", value, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andAmoutLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("amout <=", value, "amout");
+        public Criteria andAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("amount <=", value, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andAmoutIn(List<BigDecimal> values) {
-            addCriterion("amout in", values, "amout");
+        public Criteria andAmountIn(List<BigDecimal> values) {
+            addCriterion("amount in", values, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andAmoutNotIn(List<BigDecimal> values) {
-            addCriterion("amout not in", values, "amout");
+        public Criteria andAmountNotIn(List<BigDecimal> values) {
+            addCriterion("amount not in", values, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andAmoutBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("amout between", value1, value2, "amout");
+        public Criteria andAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("amount between", value1, value2, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andAmoutNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("amout not between", value1, value2, "amout");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeIsNull() {
-            addCriterion("create_time is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeIsNotNull() {
-            addCriterion("create_time is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeEqualTo(LocalDateTime value) {
-            addCreateTimeCriterion("create_time =", value, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeNotEqualTo(LocalDateTime value) {
-            addCreateTimeCriterion("create_time <>", value, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeGreaterThan(LocalDateTime value) {
-            addCreateTimeCriterion("create_time >", value, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeGreaterThanOrEqualTo(LocalDateTime value) {
-            addCreateTimeCriterion("create_time >=", value, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeLessThan(LocalDateTime value) {
-            addCreateTimeCriterion("create_time <", value, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeLessThanOrEqualTo(LocalDateTime value) {
-            addCreateTimeCriterion("create_time <=", value, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeIn(List<LocalDateTime> values) {
-            addCreateTimeCriterion("create_time in", values, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeNotIn(List<LocalDateTime> values) {
-            addCreateTimeCriterion("create_time not in", values, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeBetween(LocalDateTime value1, LocalDateTime value2) {
-            addCreateTimeCriterion("create_time between", value1, value2, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeNotBetween(LocalDateTime value1, LocalDateTime value2) {
-            addCreateTimeCriterion("create_time not between", value1, value2, "createTime");
+        public Criteria andAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("amount not between", value1, value2, "amount");
             return (Criteria) this;
         }
 
@@ -517,6 +457,66 @@ public class OrderDOExample {
 
         public Criteria andNotesNotBetween(String value1, String value2) {
             addCriterion("notes not between", value1, value2, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIsNull() {
+            addCriterion("create_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIsNotNull() {
+            addCriterion("create_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeEqualTo(LocalDateTime value) {
+            addCreateTimeCriterion("create_time =", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotEqualTo(LocalDateTime value) {
+            addCreateTimeCriterion("create_time <>", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeGreaterThan(LocalDateTime value) {
+            addCreateTimeCriterion("create_time >", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeGreaterThanOrEqualTo(LocalDateTime value) {
+            addCreateTimeCriterion("create_time >=", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeLessThan(LocalDateTime value) {
+            addCreateTimeCriterion("create_time <", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeLessThanOrEqualTo(LocalDateTime value) {
+            addCreateTimeCriterion("create_time <=", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIn(List<LocalDateTime> values) {
+            addCreateTimeCriterion("create_time in", values, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotIn(List<LocalDateTime> values) {
+            addCreateTimeCriterion("create_time not in", values, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeBetween(LocalDateTime value1, LocalDateTime value2) {
+            addCreateTimeCriterion("create_time between", value1, value2, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotBetween(LocalDateTime value1, LocalDateTime value2) {
+            addCreateTimeCriterion("create_time not between", value1, value2, "createTime");
             return (Criteria) this;
         }
     }

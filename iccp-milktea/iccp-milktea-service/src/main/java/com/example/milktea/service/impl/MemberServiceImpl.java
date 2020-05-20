@@ -46,7 +46,6 @@ public class MemberServiceImpl implements MemberService {
 		if(query.getEntity().getQueryCreateTimeBegin() != null) {
 			criteria.andCreateTimeGreaterThanOrEqualTo(query.getEntity().getQueryCreateTimeBegin());
 		}
-
 		if(query.getEntity().getQueryCreateTimeEnd() != null) {
 			criteria.andCreateTimeLessThanOrEqualTo(query.getEntity().getQueryCreateTimeEnd());
 		}

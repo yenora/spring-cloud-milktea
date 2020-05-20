@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.example.milktea.mapper.OrderDetailDOMapper" >
-  <resultMap id="BaseResultMap" type="com.example.milktea.pojo.OrderDetailDO" >
+<mapper namespace="com.example.milktea.mapper.OrdersDetailDOMapper" >
+  <resultMap id="BaseResultMap" type="com.example.milktea.pojo.OrdersDetailDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="order_id" property="orderId" jdbcType="BIGINT" />
     <result column="product_id" property="productId" jdbcType="BIGINT" />
@@ -68,13 +68,13 @@
   <sql id="Base_Column_List" >
     id, order_id, product_id, quantity
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.milktea.pojo.OrderDetailDOExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.milktea.pojo.OrdersDetailDOExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from order_detail
+    from orders_detail
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -85,27 +85,27 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select
     <include refid="Base_Column_List" />
-    from order_detail
+    from orders_detail
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from order_detail
+    delete from orders_detail
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.example.milktea.pojo.OrderDetailDOExample" >
-    delete from order_detail
+  <delete id="deleteByExample" parameterType="com.example.milktea.pojo.OrdersDetailDOExample" >
+    delete from orders_detail
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.example.milktea.pojo.OrderDetailDO" >
-    insert into order_detail (id, order_id, product_id,
+  <insert id="insert" parameterType="com.example.milktea.pojo.OrdersDetailDO" >
+    insert into orders_detail (id, order_id, product_id,
     quantity)
     values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT},
     #{quantity,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.example.milktea.pojo.OrderDetailDO" >
-    insert into order_detail
+  <insert id="insertSelective" parameterType="com.example.milktea.pojo.OrdersDetailDO" >
+    insert into orders_detail
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -135,14 +135,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.example.milktea.pojo.OrderDetailDOExample" resultType="java.lang.Integer" >
-    select count(*) from order_detail
+  <select id="countByExample" parameterType="com.example.milktea.pojo.OrdersDetailDOExample" resultType="java.lang.Integer" >
+    select count(*) from orders_detail
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update order_detail
+    update orders_detail
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=BIGINT},
@@ -162,7 +162,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update order_detail
+    update orders_detail
     set id = #{record.id,jdbcType=BIGINT},
     order_id = #{record.orderId,jdbcType=BIGINT},
     product_id = #{record.productId,jdbcType=BIGINT},
@@ -171,8 +171,8 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.milktea.pojo.OrderDetailDO" >
-    update order_detail
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.milktea.pojo.OrdersDetailDO" >
+    update orders_detail
     <set >
       <if test="orderId != null" >
         order_id = #{orderId,jdbcType=BIGINT},
@@ -186,8 +186,8 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.milktea.pojo.OrderDetailDO" >
-    update order_detail
+  <update id="updateByPrimaryKey" parameterType="com.example.milktea.pojo.OrdersDetailDO" >
+    update orders_detail
     set order_id = #{orderId,jdbcType=BIGINT},
     product_id = #{productId,jdbcType=BIGINT},
     quantity = #{quantity,jdbcType=INTEGER}

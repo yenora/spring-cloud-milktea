@@ -1,5 +1,6 @@
 package com.example.milktea.pojo;
 
+import com.example.common.annotation.VOAttribute;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrderDO {
+public class OrdersDO {
     /** */
     private Long id;
 
@@ -27,19 +28,31 @@ public class OrderDO {
     /** 顾客id*/
     private Long memberId;
 
-    /** 订单总额*/
-    private BigDecimal amout;
+    /** 总金额*/
+    private BigDecimal amount;
 
-    /** 订单创建日期*/
+    /** 备注*/
+    @Length(max = 255, message = "备注最大长度为255")
+    private String notes;
+
+    /** 生成时间*/
     @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class, as = LocalDateTime.class)
     private LocalDateTime createTime;
 
-    /** 备注*/
-    @Length(max = 255, message = "备注最大长度为255")
-    private String notes;
+    /** 客户*/
+    @VOAttribute
+    private MemberDO member;
+
+    /** 查询订单创建时间的开始时间 */
+    @VOAttribute
+    private LocalDateTime queryCreateTimeBegin;
+
+    /** 查询订单创建时间的结束时间 */
+    @VOAttribute
+    private LocalDateTime queryCreateTimeEnd;
 
     public Long getId() {
         return id;
@@ -54,7 +67,7 @@ public class OrderDO {
     }
 
     public void setOrderId(String orderId) {
-        this.orderId = orderId;
+        this.orderId = orderId == null ? null : orderId.trim();
     }
 
     public Long getMemberId() {
@@ -65,12 +78,20 @@ public class OrderDO {
         this.memberId = memberId;
     }
 
-    public BigDecimal getAmout() {
-        return amout;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public void setAmout(BigDecimal amout) {
-        this.amout = amout;
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes == null ? null : notes.trim();
     }
 
     public LocalDateTime getCreateTime() {
@@ -81,11 +102,27 @@ public class OrderDO {
         this.createTime = createTime;
     }
 
-    public String getNotes() {
-        return notes;
+    public MemberDO getMember() {
+        return member;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setMember(MemberDO member) {
+        this.member = member;
+    }
+
+    public LocalDateTime getQueryCreateTimeBegin() {
+        return queryCreateTimeBegin;
+    }
+
+    public void setQueryCreateTimeBegin(LocalDateTime queryCreateTimeBegin) {
+        this.queryCreateTimeBegin = queryCreateTimeBegin;
+    }
+
+    public LocalDateTime getQueryCreateTimeEnd() {
+        return queryCreateTimeEnd;
+    }
+
+    public void setQueryCreateTimeEnd(LocalDateTime queryCreateTimeEnd) {
+        this.queryCreateTimeEnd = queryCreateTimeEnd;
     }
 }

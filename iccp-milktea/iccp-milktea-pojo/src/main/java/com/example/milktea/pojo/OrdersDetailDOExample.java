@@ -3,14 +3,14 @@ package com.example.milktea.pojo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderDetailDOExample {
+public class OrdersDetailDOExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public OrderDetailDOExample() {
+    public OrdersDetailDOExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 

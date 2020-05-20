@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.example.milktea.mapper.OrderDOMapper" >
-  <resultMap id="BaseResultMap" type="com.example.milktea.pojo.OrderDO" >
+<mapper namespace="com.example.milktea.mapper.OrdersDOMapper" >
+  <resultMap id="BaseResultMap" type="com.example.milktea.pojo.OrdersDO" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="order_id" property="orderId" jdbcType="VARCHAR" />
     <result column="member_id" property="memberId" jdbcType="BIGINT" />
-    <result column="amout" property="amout" jdbcType="DECIMAL" />
-    <result column="create_time" property="createTime" jdbcType="OTHER" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
     <result column="notes" property="notes" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="OTHER" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -106,15 +106,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, order_id, member_id, amout, create_time, notes
+    id, order_id, member_id, amount, notes, create_time
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.milktea.pojo.OrderDOExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.milktea.pojo.OrdersDOExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from order
+    from orders
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -125,29 +125,29 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select
     <include refid="Base_Column_List" />
-    from order
+    from orders
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from order
+    delete from orders
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.example.milktea.pojo.OrderDOExample" >
-    delete from order
+  <delete id="deleteByExample" parameterType="com.example.milktea.pojo.OrdersDOExample" >
+    delete from orders
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.example.milktea.pojo.OrderDO" >
-    insert into order (id, order_id, member_id,
-    amout, create_time,
-    notes)
+  <insert id="insert" parameterType="com.example.milktea.pojo.OrdersDO" >
+    insert into orders (id, order_id, member_id,
+    amount, notes, create_time
+    )
     values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR}, #{memberId,jdbcType=BIGINT},
-    #{amout,jdbcType=DECIMAL}, #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
-    #{notes,jdbcType=VARCHAR})
+    #{amount,jdbcType=DECIMAL}, #{notes,jdbcType=VARCHAR}, #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+    )
   </insert>
-  <insert id="insertSelective" parameterType="com.example.milktea.pojo.OrderDO" >
-    insert into order
+  <insert id="insertSelective" parameterType="com.example.milktea.pojo.OrdersDO" >
+    insert into orders
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -158,14 +158,14 @@
       <if test="memberId != null" >
         member_id,
       </if>
-      <if test="amout != null" >
-        amout,
-      </if>
-      <if test="createTime != null" >
-        create_time,
+      <if test="amount != null" >
+        amount,
       </if>
       <if test="notes != null" >
         notes,
+      </if>
+      <if test="createTime != null" >
+        create_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -178,25 +178,25 @@
       <if test="memberId != null" >
         #{memberId,jdbcType=BIGINT},
       </if>
-      <if test="amout != null" >
-        #{amout,jdbcType=DECIMAL},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
       </if>
       <if test="notes != null" >
         #{notes,jdbcType=VARCHAR},
       </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.example.milktea.pojo.OrderDOExample" resultType="java.lang.Integer" >
-    select count(*) from order
+  <select id="countByExample" parameterType="com.example.milktea.pojo.OrdersDOExample" resultType="java.lang.Integer" >
+    select count(*) from orders
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update order
+    update orders
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=BIGINT},
@@ -207,14 +207,14 @@
       <if test="record.memberId != null" >
         member_id = #{record.memberId,jdbcType=BIGINT},
       </if>
-      <if test="record.amout != null" >
-        amout = #{record.amout,jdbcType=DECIMAL},
-      </if>
-      <if test="record.createTime != null" >
-        create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      <if test="record.amount != null" >
+        amount = #{record.amount,jdbcType=DECIMAL},
       </if>
       <if test="record.notes != null" >
         notes = #{record.notes,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -222,19 +222,19 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update order
+    update orders
     set id = #{record.id,jdbcType=BIGINT},
     order_id = #{record.orderId,jdbcType=VARCHAR},
     member_id = #{record.memberId,jdbcType=BIGINT},
-    amout = #{record.amout,jdbcType=DECIMAL},
-    create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
-    notes = #{record.notes,jdbcType=VARCHAR}
+    amount = #{record.amount,jdbcType=DECIMAL},
+    notes = #{record.notes,jdbcType=VARCHAR},
+    create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.milktea.pojo.OrderDO" >
-    update order
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.milktea.pojo.OrdersDO" >
+    update orders
     <set >
       <if test="orderId != null" >
         order_id = #{orderId,jdbcType=VARCHAR},
@@ -242,25 +242,25 @@
       <if test="memberId != null" >
         member_id = #{memberId,jdbcType=BIGINT},
       </if>
-      <if test="amout != null" >
-        amout = #{amout,jdbcType=DECIMAL},
-      </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
       </if>
       <if test="notes != null" >
         notes = #{notes,jdbcType=VARCHAR},
       </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.milktea.pojo.OrderDO" >
-    update order
+  <update id="updateByPrimaryKey" parameterType="com.example.milktea.pojo.OrdersDO" >
+    update orders
     set order_id = #{orderId,jdbcType=VARCHAR},
     member_id = #{memberId,jdbcType=BIGINT},
-    amout = #{amout,jdbcType=DECIMAL},
-    create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
-    notes = #{notes,jdbcType=VARCHAR}
+    amount = #{amount,jdbcType=DECIMAL},
+    notes = #{notes,jdbcType=VARCHAR},
+    create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

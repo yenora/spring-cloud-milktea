@@ -1,15 +1,14 @@
 package com.example.milktea.pojo;
 
+import com.example.common.annotation.VOAttribute;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrderDetailDO {
+public class OrdersDetailDO {
     /** 自增ID*/
     private Long id;
 
@@ -21,6 +20,9 @@ public class OrderDetailDO {
 
     /** 数量*/
     private Integer quantity;
+
+    @VOAttribute
+    private ProductDO product;
 
     public Long getId() {
         return id;
@@ -52,5 +54,13 @@ public class OrderDetailDO {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public ProductDO getProduct() {
+        return product;
+    }
+
+    public void setProduct(ProductDO product) {
+        this.product = product;
     }
 }
